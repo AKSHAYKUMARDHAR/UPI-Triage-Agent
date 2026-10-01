@@ -74,7 +74,7 @@ copy .env.example .env                        # add a free GEMINI_API_KEY (or AN
 docker compose up -d                          # Postgres+pgvector on :5433, n8n on :5678
 python data/generator.py                      # statements.csv + golden_set.csv
 python -m rag.build_index                     # merchant embeddings -> pgvector + rag/index/
-pytest                                        # 28 tests, no API key needed
+pytest                                        # 32 tests, no API key needed
 ```
 
 Postgres is published on host port **5433** so it never collides with a locally installed
@@ -85,6 +85,7 @@ Postgres on 5432.
 | What | Command |
 |---|---|
 | Version A eval | `python -m eval.predict_baseline` then `python -m eval.run_eval eval/predictions_baseline.csv --sweep` |
+| Held-out eval | add `--gold data/holdout_set.csv` to any predict / run_eval command |
 | Version B / C eval | `python -m eval.predict_agent --version C --limit 20` (smoke), then without `--limit`; score with `python -m eval.run_eval eval/predictions_C.csv`. On Gemini's free tier a full run takes ~15-25 min because of the rate limit |
 | API | `uvicorn api.main:app --host 0.0.0.0 --port 8000` |
 | Review UI | http://localhost:8000/review |
@@ -110,7 +111,7 @@ Postgres on 5432.
 listed by the MCP server plus a local `submit_decision` tool (category enum = taxonomy).
 Two providers, picked by whichever key is in `.env`:
 - **Claude** (`claude-sonnet-5-5` / `claude-opus-5-5`, effort `low`) through the Anthropic SDK.
-- **Gemini free tier** (`gemini-3.5-flash` by default; `gemini-2.5-flash` is closed to new keys) through
+- **Gemini free tier** (`gemini-3.1-flash-lite` by default: on a new key `gemini-2.5-flash` is closed and `gemini-3.5-flash` allows only 20 free requests/day) through
   [agent/gemini_client.py](agent/gemini_client.py), an adapter that exposes the same call
   shape the loop uses. It translates tool schemas and tool results, replays the model's own
   turns unchanged (Gemini needs its thought signatures back for multi-turn tool use), throttles

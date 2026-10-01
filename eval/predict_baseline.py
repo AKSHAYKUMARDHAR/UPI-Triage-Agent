@@ -18,10 +18,15 @@ ROOT = Path(__file__).resolve().parent.parent
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--gate", type=float, default=0.84)
-    ap.add_argument("--out", default=str(ROOT / "eval" / "predictions_baseline.csv"))
+    ap.add_argument("--gold", default=str(ROOT / "data" / "golden_set.csv"),
+                    help="labelled set to predict on, e.g. data/holdout_set.csv")
+    ap.add_argument("--out", default=None)
     args = ap.parse_args()
+    stem = Path(args.gold).stem
+    args.out = args.out or str(ROOT / "eval" / ("predictions_baseline.csv" if stem == "golden_set"
+                                                 else f"predictions_baseline_{stem.removesuffix('_set')}.csv"))
 
-    with open(ROOT / "data" / "golden_set.csv", newline="", encoding="utf-8") as f:
+    with open(args.gold, newline="", encoding="utf-8") as f:
         rows = list(csv.DictReader(f))
 
     t0, out = time.perf_counter(), []

@@ -50,7 +50,7 @@ def _resolve_provider() -> str:
 
 
 PROVIDER = _resolve_provider()
-MODEL = (os.getenv("GEMINI_MODEL", "gemini-3.5-flash") if PROVIDER == "gemini"
+MODEL = (os.getenv("GEMINI_MODEL", "gemini-3.1-flash-lite") if PROVIDER == "gemini"
          else os.getenv("LLM_MODEL", "claude-opus-5-5"))
 EFFORT = os.getenv("LLM_EFFORT", "low")            # per-row classification: low effort is enough
 CONCURRENCY = int(os.getenv("AGENT_CONCURRENCY", "6"))

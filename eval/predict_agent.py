@@ -50,7 +50,9 @@ def main():
         gold_rows = gold_rows[: args.limit]
     rows = [{k: r[k] for k in INPUT_COLS} for r in gold_rows]  # the only columns the agent sees
 
-    suffix = args.version + (f"_limit{args.limit}" if args.limit else "")
+    gold_stem = Path(args.gold).stem
+    suffix = (args.version + ("" if gold_stem == "golden_set" else f"_{gold_stem.removesuffix('_set')}")
+              + (f"_limit{args.limit}" if args.limit else ""))
     kept = {}
     previous = RESULTS / f"decisions_{suffix}.jsonl"
     if args.resume and previous.exists():
@@ -88,7 +90,7 @@ def main():
         metrics = score(gold, {r["txn_id"]: r for r in csv.DictReader(f)})
     agent_rows = [d for d in decisions if d["decided_by"] == "agent"]
     manifest = {
-        "at": datetime.now(timezone.utc).isoformat(timespec="seconds"), "version": args.version,
+        "at": datetime.now(timezone.utc).isoformat(timespec="seconds"), "version": args.version, "gold": gold_stem,
         "rows": len(rows), "gate": loop.CONFIDENCE_GATE,
         "provider": loop.PROVIDER if use_agent else None, "model": loop.MODEL if use_agent else None, "effort": loop.EFFORT if use_agent else None,
         "prompt_version": loop.PROMPT_VERSION if use_agent else None, "transport": loop.TOOLS_TRANSPORT,
@@ -108,7 +110,8 @@ def main():
     if llm_errors:
         print(f"WARNING: {llm_errors} rows hit LLM errors (quota or rate limit?) and were routed to review; "
               f"see eval/results/decisions_{suffix}.jsonl. Re-run later for clean numbers.")
-    print(f"score it: python -m eval.run_eval {out_csv.relative_to(ROOT).as_posix()} --sweep")
+    gold_flag = "" if gold_stem == "golden_set" else f" --gold {Path(args.gold).as_posix()}"
+    print(f"score it: python -m eval.run_eval {out_csv.relative_to(ROOT).as_posix()}{gold_flag} --sweep")
 
 
 if __name__ == "__main__":
