@@ -32,6 +32,12 @@ class LLMCallError(Exception):
     """The provider call failed after retries; the loop routes the row to review."""
 
 
+def _daily_quota(e) -> bool:
+    """A per-day quota 429 will not clear by retrying; fail fast so the run can resume tomorrow."""
+    details = (getattr(e, "details", None) or {}).get("error", {}).get("details", [])
+    return any("PerDay" in v.get("quotaId", "") for d in details for v in d.get("violations", []))
+
+
 def api_key() -> str | None:
     return os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
 
@@ -156,11 +162,14 @@ class GeminiClient:
                 resp = await self._genai.aio.models.generate_content(model=self.model, contents=contents, config=config)
                 return self._translate(resp)
             except errors.APIError as e:
-                retryable = getattr(e, "code", None) in (429, 500, 502, 503, 504)
+                retryable = getattr(e, "code", None) in (429, 500, 502, 503, 504) and not _daily_quota(e)
                 if not retryable or attempt == MAX_RETRIES:
                     raise LLMCallError(f"Gemini {getattr(e, 'code', '?')}: {str(e)[:300]}") from e
-                await asyncio.sleep(delay)
-                delay = min(delay * 2, 90.0)
+            except Exception as e:  # dropped connection, timeout, DNS: transient on a home network
+                if attempt == MAX_RETRIES:
+                    raise LLMCallError(f"Gemini transport error: {type(e).__name__}: {str(e)[:200]}") from e
+            await asyncio.sleep(delay)
+            delay = min(delay * 2, 90.0)
 
 
 def list_models():

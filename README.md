@@ -74,7 +74,7 @@ copy .env.example .env                        # add a free GEMINI_API_KEY (or AN
 docker compose up -d                          # Postgres+pgvector on :5433, n8n on :5678
 python data/generator.py                      # statements.csv + golden_set.csv
 python -m rag.build_index                     # merchant embeddings -> pgvector + rag/index/
-pytest                                        # 26 tests, no API key needed
+pytest                                        # 28 tests, no API key needed
 ```
 
 Postgres is published on host port **5433** so it never collides with a locally installed
@@ -110,7 +110,7 @@ Postgres on 5432.
 listed by the MCP server plus a local `submit_decision` tool (category enum = taxonomy).
 Two providers, picked by whichever key is in `.env`:
 - **Claude** (`claude-sonnet-5-5` / `claude-opus-5-5`, effort `low`) through the Anthropic SDK.
-- **Gemini free tier** (`gemini-2.5-flash` by default) through
+- **Gemini free tier** (`gemini-3.5-flash` by default; `gemini-2.5-flash` is closed to new keys) through
   [agent/gemini_client.py](agent/gemini_client.py), an adapter that exposes the same call
   shape the loop uses. It translates tool schemas and tool results, replays the model's own
   turns unchanged (Gemini needs its thought signatures back for multi-turn tool use), throttles

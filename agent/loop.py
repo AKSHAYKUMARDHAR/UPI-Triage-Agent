@@ -50,7 +50,7 @@ def _resolve_provider() -> str:
 
 
 PROVIDER = _resolve_provider()
-MODEL = (os.getenv("GEMINI_MODEL", "gemini-2.5-flash") if PROVIDER == "gemini"
+MODEL = (os.getenv("GEMINI_MODEL", "gemini-3.5-flash") if PROVIDER == "gemini"
          else os.getenv("LLM_MODEL", "claude-opus-5-5"))
 EFFORT = os.getenv("LLM_EFFORT", "low")            # per-row classification: low effort is enough
 CONCURRENCY = int(os.getenv("AGENT_CONCURRENCY", "6"))
@@ -113,8 +113,8 @@ def has_llm_credentials() -> bool:
 
 
 def cost_usd(model: str, usage: dict) -> float:
-    if model.startswith("gemini"):
-        return 0.0  # Gemini free tier: rate-limited, not billed
+    if PROVIDER == "gemini" or model.startswith(("gemini", "gemma")):
+        return 0.0  # Google AI Studio free tier (Gemini and Gemma): rate-limited, not billed
     p_in, p_out, p_read, p_write = PRICES.get(model, PRICES["claude-opus-5-5"])
     return (usage["input"] * p_in + usage["output"] * p_out + usage["cache_read"] * p_read
             + usage["cache_write"] * p_write) / 1_000_000
@@ -189,10 +189,6 @@ def _summarize(payload, limit: int = 300) -> str:
 
 async def _agent_row(llm, tb: Toolbox, tools: list[dict], system: str, row: dict, base: dict,
                      sem: asyncio.Semaphore, base_latency: float) -> dict:
-    import anthropic
-
-    from agent.gemini_client import LLMCallError
-
     async with sem:
         t0 = time.perf_counter()
         messages = [{"role": "user", "content": _render_row(row, base)}]
@@ -208,7 +204,9 @@ async def _agent_row(llm, tb: Toolbox, tools: list[dict], system: str, row: dict
                     system=[{"type": "text", "text": system, "cache_control": {"type": "ephemeral"}}],
                     tools=tools, messages=messages, **_model_kwargs(MODEL),
                 )
-            except (anthropic.APIError, LLMCallError, TypeError) as e:  # TypeError: no usable credentials
+            # Any failure at the provider boundary (API error, no credentials, network) costs this row
+            # only: it goes to review with the error in its audit trail; the batch carries on.
+            except Exception as e:
                 violations.append("llm_error")
                 calls.append({"name": "llm", "ok": False, "result": f"{type(e).__name__}: {e}"[:300]})
                 break
