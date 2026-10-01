@@ -38,7 +38,7 @@ def main():
 
     use_agent, use_rag = {"A": (False, False), "B": (True, False), "C": (True, True)}[args.version]
     if use_agent and not loop.has_llm_credentials():
-        raise SystemExit("Version B/C needs Claude credentials: set ANTHROPIC_API_KEY in .env")
+        raise SystemExit("Version B/C needs an LLM key: ANTHROPIC_API_KEY or (free) GEMINI_API_KEY in .env")
 
     with open(args.gold, newline="", encoding="utf-8") as f:
         gold_rows = list(csv.DictReader(f))
@@ -73,7 +73,7 @@ def main():
     manifest = {
         "at": datetime.now(timezone.utc).isoformat(timespec="seconds"), "version": args.version,
         "rows": len(rows), "gate": loop.CONFIDENCE_GATE,
-        "model": loop.MODEL if use_agent else None, "effort": loop.EFFORT if use_agent else None,
+        "provider": loop.PROVIDER if use_agent else None, "model": loop.MODEL if use_agent else None, "effort": loop.EFFORT if use_agent else None,
         "prompt_version": loop.PROMPT_VERSION if use_agent else None, "transport": loop.TOOLS_TRANSPORT,
         "agent_rows": len(agent_rows),
         "cost_usd": round(sum(d["cost_usd"] for d in decisions), 4),
@@ -87,6 +87,10 @@ def main():
 
     print(f"wrote {out_csv.relative_to(ROOT)} ({len(rows)} rows, {len(agent_rows)} sent to the agent, "
           f"{wall:.1f}s wall, ${manifest['cost_usd']:.4f})")
+    llm_errors = sum("llm_error" in d["violations"] for d in decisions)
+    if llm_errors:
+        print(f"WARNING: {llm_errors} rows hit LLM errors (quota or rate limit?) and were routed to review; "
+              f"see eval/results/decisions_{suffix}.jsonl. Re-run later for clean numbers.")
     print(f"score it: python -m eval.run_eval {out_csv.relative_to(ROOT).as_posix()} --sweep")
 
 

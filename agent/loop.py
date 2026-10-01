@@ -5,7 +5,7 @@ triage(rows) -> one decision per row:
      violations, tool_errors, cost_usd, latency_s, prompt_version}
 
 - Rows at/above CONFIDENCE_GATE: accept the baseline (decided_by='baseline'). No LLM cost.
-- Rows below the gate: Claude with tools (lookup_merchant if use_rag, flag_for_review,
+- Rows below the gate: an LLM (Claude, or Gemini's free tier via agent/gemini_client.py) with tools (lookup_merchant if use_rag, flag_for_review,
   submit_decision), at most guardrails.MAX_TOOL_CALLS calls per row.
 - Every tool call is logged (name, args, result summary, latency) for the audit trail;
   tokens and wall time are tracked so the eval can report cost and latency per 100 rows.
@@ -36,7 +36,22 @@ load_dotenv()
 ROOT = Path(__file__).resolve().parent.parent
 
 CONFIDENCE_GATE = float(os.getenv("CONFIDENCE_GATE", "0.84"))
-MODEL = os.getenv("LLM_MODEL", "claude-opus-5-5")
+
+
+def _resolve_provider() -> str:
+    """LLM_PROVIDER=anthropic|gemini, or auto: whichever key is configured (Claude first)."""
+    choice = os.getenv("LLM_PROVIDER", "auto").lower()
+    if choice in ("anthropic", "gemini"):
+        return choice
+    if not (os.getenv("ANTHROPIC_API_KEY") or os.getenv("ANTHROPIC_AUTH_TOKEN")) and (
+            os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")):
+        return "gemini"
+    return "anthropic"
+
+
+PROVIDER = _resolve_provider()
+MODEL = (os.getenv("GEMINI_MODEL", "gemini-2.5-flash") if PROVIDER == "gemini"
+         else os.getenv("LLM_MODEL", "claude-opus-5-5"))
 EFFORT = os.getenv("LLM_EFFORT", "low")            # per-row classification: low effort is enough
 CONCURRENCY = int(os.getenv("AGENT_CONCURRENCY", "6"))
 AGENT_MIN_CONFIDENCE = float(os.getenv("AGENT_MIN_CONFIDENCE", "0.7"))
@@ -82,6 +97,10 @@ SUBMIT_TOOL = {
 
 
 def has_llm_credentials() -> bool:
+    if PROVIDER == "gemini":
+        from agent.gemini_client import api_key
+
+        return bool(api_key())
     if os.getenv("ANTHROPIC_API_KEY") or os.getenv("ANTHROPIC_AUTH_TOKEN"):
         return True
     try:  # an `ant auth login` profile also works with a zero-arg client (resolved lazily)
@@ -94,6 +113,8 @@ def has_llm_credentials() -> bool:
 
 
 def cost_usd(model: str, usage: dict) -> float:
+    if model.startswith("gemini"):
+        return 0.0  # Gemini free tier: rate-limited, not billed
     p_in, p_out, p_read, p_write = PRICES.get(model, PRICES["claude-opus-5-5"])
     return (usage["input"] * p_in + usage["output"] * p_out + usage["cache_read"] * p_read
             + usage["cache_write"] * p_write) / 1_000_000
@@ -170,6 +191,8 @@ async def _agent_row(llm, tb: Toolbox, tools: list[dict], system: str, row: dict
                      sem: asyncio.Semaphore, base_latency: float) -> dict:
     import anthropic
 
+    from agent.gemini_client import LLMCallError
+
     async with sem:
         t0 = time.perf_counter()
         messages = [{"role": "user", "content": _render_row(row, base)}]
@@ -185,7 +208,7 @@ async def _agent_row(llm, tb: Toolbox, tools: list[dict], system: str, row: dict
                     system=[{"type": "text", "text": system, "cache_control": {"type": "ephemeral"}}],
                     tools=tools, messages=messages, **_model_kwargs(MODEL),
                 )
-            except (anthropic.APIError, TypeError) as e:  # TypeError: no usable credentials
+            except (anthropic.APIError, LLMCallError, TypeError) as e:  # TypeError: no usable credentials
                 violations.append("llm_error")
                 calls.append({"name": "llm", "ok": False, "result": f"{type(e).__name__}: {e}"[:300]})
                 break
@@ -263,6 +286,16 @@ async def _agent_row(llm, tb: Toolbox, tools: list[dict], system: str, row: dict
         return decision
 
 
+def make_llm():
+    if PROVIDER == "gemini":
+        from agent.gemini_client import GeminiClient
+
+        return GeminiClient(MODEL)
+    import anthropic
+
+    return anthropic.AsyncAnthropic()
+
+
 async def triage_async(rows: list[dict], use_agent: bool = True, use_rag: bool = True,
                        llm=None, transport: str = TOOLS_TRANSPORT) -> list[dict]:
     if not rows:
@@ -286,9 +319,7 @@ async def triage_async(rows: list[dict], use_agent: bool = True, use_rag: bool =
 
         if pending:
             if llm is None:
-                import anthropic
-
-                llm = anthropic.AsyncAnthropic()
+                llm = make_llm()
             tools = tb.tool_defs((["lookup_merchant"] if use_rag else []) + ["flag_for_review"]) + [SUBMIT_TOOL]
             system, sem = system_prompt(TAXONOMY), asyncio.Semaphore(CONCURRENCY)
             done = await asyncio.gather(*[_agent_row(llm, tb, tools, system, rows[i], base[i], sem, base_latency)

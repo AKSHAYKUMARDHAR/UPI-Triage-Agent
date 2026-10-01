@@ -2,7 +2,7 @@
 
 An AI agent that categorizes Indian bank-statement (UPI) transactions. A cheap baseline
 (rules + extraction + SBERT) handles what it is sure about. Everything below a confidence
-gate goes to a **Claude agent** that calls tools over **MCP**, looks up unknown merchants
+gate goes to an **LLM agent** (Claude, or Gemini's free tier) that calls tools over **MCP**, looks up unknown merchants
 with **RAG** (pgvector), and sends anything it is still unsure about to a **human review
 queue**. An **n8n** workflow triggers the pipeline when a statement lands, and an
 **evaluation harness** decides whether each version is good enough to ship.
@@ -70,11 +70,11 @@ python3.12 -m venv .venv
 .venv\Scripts\activate                       # Windows; source .venv/bin/activate elsewhere
 pip install torch --index-url https://download.pytorch.org/whl/cpu   # optional: small CPU build
 pip install -r requirements.txt
-copy .env.example .env                        # add ANTHROPIC_API_KEY for Versions B/C
+copy .env.example .env                        # add a free GEMINI_API_KEY (or ANTHROPIC_API_KEY) for B/C
 docker compose up -d                          # Postgres+pgvector on :5433, n8n on :5678
 python data/generator.py                      # statements.csv + golden_set.csv
 python -m rag.build_index                     # merchant embeddings -> pgvector + rag/index/
-pytest                                        # 23 tests, no API key needed
+pytest                                        # 26 tests, no API key needed
 ```
 
 Postgres is published on host port **5433** so it never collides with a locally installed
@@ -85,7 +85,7 @@ Postgres on 5432.
 | What | Command |
 |---|---|
 | Version A eval | `python -m eval.predict_baseline` then `python -m eval.run_eval eval/predictions_baseline.csv --sweep` |
-| Version B / C eval | `python -m eval.predict_agent --version C --limit 20` (smoke), then without `--limit`; score with `python -m eval.run_eval eval/predictions_C.csv` |
+| Version B / C eval | `python -m eval.predict_agent --version C --limit 20` (smoke), then without `--limit`; score with `python -m eval.run_eval eval/predictions_C.csv`. On Gemini's free tier a full run takes ~15-25 min because of the rate limit |
 | API | `uvicorn api.main:app --host 0.0.0.0 --port 8000` |
 | Review UI | http://localhost:8000/review |
 | n8n workflow | see [n8n/README.md](n8n/README.md); then `python data/drop_statement.py S003` |
@@ -106,16 +106,25 @@ Postgres on 5432.
    deliberately do not come from `merchants.csv`, which is the RAG directory: using it here
    would leak Version C's knowledge into Version A.
 
-**Agent** ([agent/loop.py](agent/loop.py)). Rows below the gate go to Claude (default
-`claude-opus-5-5`, effort `low`) with the tools listed by the MCP server plus a local
-`submit_decision` tool (strict schema, category enum = taxonomy). The loop:
+**Agent** ([agent/loop.py](agent/loop.py)). Rows below the gate go to an LLM with the tools
+listed by the MCP server plus a local `submit_decision` tool (category enum = taxonomy).
+Two providers, picked by whichever key is in `.env`:
+- **Claude** (`claude-sonnet-5-5` / `claude-opus-5-5`, effort `low`) through the Anthropic SDK.
+- **Gemini free tier** (`gemini-2.5-flash` by default) through
+  [agent/gemini_client.py](agent/gemini_client.py), an adapter that exposes the same call
+  shape the loop uses. It translates tool schemas and tool results, replays the model's own
+  turns unchanged (Gemini needs its thought signatures back for multi-turn tool use), throttles
+  to the free tier's requests-per-minute and retries 429s. `python -m agent.gemini_client`
+  lists the models a key can use.
+
+The loop:
 - caps tool calls per row (4), nudges once if the model answers in text, and routes to
   review on refusal, API error, guardrail violation or agent confidence below 0.7;
 - never trusts the model to copy ids (`txn_id` is overwritten in `flag_for_review`);
 - treats the narration as untrusted data (the prompt says so; it is never an instruction);
 - logs every tool call with args, result summary and latency, plus tokens and cost;
-- uses server-side refusal fallback (`fallbacks: "default"`) so a declined request is
-  re-run on a fallback model instead of failing the row;
+- on Claude, uses server-side refusal fallback (`fallbacks: "default"`) so a declined
+  request is re-run on a fallback model instead of failing the row;
 - versions the prompt ([agent/prompts.py](agent/prompts.py)); each eval run records it.
 
 **Guardrails** ([agent/guardrails.py](agent/guardrails.py)): category in taxonomy, ≤ 4 tool
@@ -160,10 +169,10 @@ the rules don't cover", not only small local shops.
 | `categorizer/` | Baseline: rules, extraction, SBERT |
 | `rag/` | Build and query the merchant embedding index |
 | `mcp_server/server.py` | MCP tools (stdio) |
-| `agent/` | Agent loop, versioned prompt, guardrails |
+| `agent/` | Agent loop, Gemini adapter, versioned prompt, guardrails |
 | `api/main.py` | `/triage`, `/health`, review API |
 | `review_ui/index.html` | Review queue UI (served at `/review`) |
 | `n8n/triage_workflow.json` | Importable n8n workflow |
 | `db/` | Postgres schema (`init.sql`) and helpers |
 | `eval/` | Prediction runners, metrics, run log (`results/runs.jsonl`) |
-| `tests/` | Extraction, rules, guardrails, agent loop with a fake Claude client |
+| `tests/` | Extraction, rules, guardrails, agent loop with fake Claude and Gemini backends |
