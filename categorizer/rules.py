@@ -22,6 +22,7 @@ from typing import Optional
 
 from categorizer import Prediction
 from categorizer.extract import merchant as extract_merchant
+from categorizer.extract import strip_prefix
 
 CONF_BANK = 0.97        # bank-rail patterns are unambiguous
 CONF_VPA = 0.97         # brand VPA handle: the strongest UPI signal
@@ -31,7 +32,8 @@ CONF_NAME_FUZZY = 0.88  # truncated / misspelt brand name
 # (rule id, category, compiled pattern). Only applied to non-UPI narrations.
 BANK_RULES = [
     ("salary", "Salary & Income", re.compile(r"\b(SALARY|SAL CR|PAYROLL)\b", re.I)),
-    ("interest", "Salary & Income", re.compile(r"\b(INT\.?\s?PD|INTEREST (CR|CREDIT|PAID))\b", re.I)),
+    ("interest", "Salary & Income",
+     re.compile(r"\b(INT\.?\s?(PD|CR)|INTEREST (CR|CREDIT|CREDITED|PAID)|CREDIT INTEREST|SB INTEREST)\b", re.I)),
     ("atm", "Cash Withdrawal", re.compile(r"^(ATW|NWD|EAW|ATM)[-/ ]|\b(ATM WDL|CASH WDL|CASH WITHDRAWAL)\b", re.I)),
     ("charges", "Bank Charges",
      re.compile(r"\b(CHARGES?|CHRGS?|ANNUAL FEE|SERVICE FEE|MIN(IMUM)? BAL|NON[- ]MAINT|GST ON)\b", re.I)),
@@ -103,7 +105,7 @@ def _match_name(payee: str) -> Optional[Prediction]:
 def match(narration: str) -> Optional[Prediction]:
     if not narration:
         return None
-    if not re.match(r"^\s*UPI", narration, re.I):
+    if not re.match(r"^\s*UPI", strip_prefix(narration), re.I):  # "TO TRANSFER-UPI/..." is still UPI
         for rule_id, cat, pat in BANK_RULES:
             if pat.search(narration):
                 return Prediction(cat, CONF_BANK, f"rules: bank pattern '{rule_id}' -> {cat}", "rules")

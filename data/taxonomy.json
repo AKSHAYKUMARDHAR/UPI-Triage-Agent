@@ -17,7 +17,8 @@
     "Salary & Income",
     "Investments",
     "Cash Withdrawal",
-    "Bank Charges"
+    "Bank Charges",
+    "Self Transfer"
   ],
   "fallback": "Uncategorized"
 }

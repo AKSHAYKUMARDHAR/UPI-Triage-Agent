@@ -11,4 +11,8 @@ mcp>=2.2,<3          # 2.x API (MCPServer / Client); the 1.x FastMCP import no l
 anthropic>=1.11
 google-genai>=2.26  # free-tier alternative to Claude (agent/gemini_client.py)
 python-dotenv
+openpyxl            # .xlsx statement exports
+xlrd                # legacy .xls statement exports
+lxml                # banks that save an HTML table as .xls
+python-multipart    # statement upload: POST /triage/file
 pytest

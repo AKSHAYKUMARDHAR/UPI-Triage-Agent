@@ -35,6 +35,7 @@ CONF_P2P_NOTE = 0.90    # person + a note that says what it was for
 CONF_P2P_BARE = 0.80    # person, no note: probably P2P, but undisclosed rent looks the same
 CONF_P2P_UNREAD = 0.75  # a note the rules cannot read ("rnt", "tuition"): below the gate, so someone reads it
 CONF_REFUND = 0.70      # money back from a person may belong to the original purchase's category
+CONF_SELF = 0.95        # own-account transfer: a "self" note, or the payee is the account holder (OWN_NAMES)
 
 
 def _person(ext: extract.Extracted) -> Prediction:
@@ -68,6 +69,9 @@ def categorize(narration: str) -> Prediction:
     ext = extract.merchant(narration)
     if not ext:
         return Prediction("Uncategorized", 0.0, "none: no rule hit and no payee found", "none")
+    if extract.is_self_transfer(ext):
+        who = ext.get("payee") or ext.get("vpa", "")
+        return Prediction("Self Transfer", CONF_SELF, f"extract: transfer between own accounts ('{who}')", "extract")
     if ext.get("looks_like_person"):
         return _person(ext)
     text = semantic.payee_text(ext.get("payee", ""), ext.get("vpa", ""))
