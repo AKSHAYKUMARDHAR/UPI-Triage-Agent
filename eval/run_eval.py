@@ -114,9 +114,14 @@ def main():
     extra = [r for r in pred.values() if r.get("cost_usd")]
     if extra:
         cost = sum(float(r["cost_usd"]) for r in extra) / len(pred) * 100
-        lat = sum(float(r.get("latency_s") or 0) for r in pred.values()) / len(pred) * 100
+        # Agent rows run in parallel, so per-row latencies overlap: summing them is not wall time.
+        # Report the per-row distribution here; wall time per run is in eval/results/runs.jsonl.
+        lats = sorted(float(r.get("latency_s") or 0) for r in pred.values())
+        p95 = lats[int(0.95 * (len(lats) - 1))]
         errs = sum(int(r.get("tool_errors") or 0) for r in pred.values())
-        print(f"cost per 100 rows    ${cost:.4f}\nlatency per 100 rows {lat:.1f}s\ntool-call errors     {errs}")
+        print(f"cost per 100 rows    ${cost:.4f}\n"
+              f"row latency          mean {sum(lats) / len(lats):.2f}s, p95 {p95:.2f}s (wall time: runs.jsonl)\n"
+              f"tool-call errors     {errs}")
 
     print("top errors (label -> predicted):")
     for e, c in s["top_errors"]:

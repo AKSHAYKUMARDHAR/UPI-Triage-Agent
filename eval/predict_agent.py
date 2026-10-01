@@ -92,7 +92,8 @@ def main():
     manifest = {
         "at": datetime.now(timezone.utc).isoformat(timespec="seconds"), "version": args.version, "gold": gold_stem,
         "rows": len(rows), "gate": loop.CONFIDENCE_GATE,
-        "provider": loop.PROVIDER if use_agent else None, "model": loop.MODEL if use_agent else None, "effort": loop.EFFORT if use_agent else None,
+        "provider": loop.PROVIDER if use_agent else None, "model": loop.MODEL if use_agent else None,
+        "effort": loop.EFFORT if use_agent else None,
         "prompt_version": loop.PROMPT_VERSION if use_agent else None, "transport": loop.TOOLS_TRANSPORT,
         "agent_rows": len(agent_rows), "resumed_rows": len(kept),
         "cost_usd": round(sum(d["cost_usd"] for d in decisions), 4),

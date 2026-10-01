@@ -5,8 +5,9 @@ triage(rows) -> one decision per row:
      violations, tool_errors, cost_usd, latency_s, prompt_version}
 
 - Rows at/above CONFIDENCE_GATE: accept the baseline (decided_by='baseline'). No LLM cost.
-- Rows below the gate: an LLM (Claude, or Gemini's free tier via agent/gemini_client.py) with tools (lookup_merchant if use_rag, flag_for_review,
-  submit_decision), at most guardrails.MAX_TOOL_CALLS calls per row.
+- Rows below the gate: an LLM (Claude, or Gemini's free tier via agent/gemini_client.py) with
+  tools (lookup_merchant if use_rag, flag_for_review, submit_decision), at most
+  guardrails.MAX_TOOL_CALLS calls per row.
 - Every tool call is logged (name, args, result summary, latency) for the audit trail;
   tokens and wall time are tracked so the eval can report cost and latency per 100 rows.
 

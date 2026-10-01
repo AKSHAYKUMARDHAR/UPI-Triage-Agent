@@ -6,7 +6,8 @@ GeminiClient exposes exactly that surface on top of the google-genai SDK, so the
 guardrails, audit trail and eval are identical for both providers.
 
 Translation:
-  system + tools (JSON schema)   -> system_instruction + FunctionDeclaration(parameters_json_schema)
+  system + tools (JSON schema)   -> system_instruction + FunctionDeclaration(parameters_json_schema),
+                                    function calling mode VALIDATED (calls must match the schema)
   assistant turns                -> the model's original Content, replayed unchanged (keeps the
                                     thought signatures Gemini requires for multi-turn tool use)
   tool_result blocks             -> FunctionResponse parts, matched to the call by id/name
@@ -81,7 +82,9 @@ class GeminiClient:
         return types.GenerateContentConfig(
             system_instruction=text,
             tools=[types.Tool(function_declarations=decls)] if decls else None,
-            tool_config=types.ToolConfig(function_calling_config=types.FunctionCallingConfig(mode="AUTO")),
+            # VALIDATED: free to answer in text, but any function call must match its declared schema
+            # (Gemini's counterpart to Claude's strict tools). AUTO once returned confidence as "0.85".
+            tool_config=types.ToolConfig(function_calling_config=types.FunctionCallingConfig(mode="VALIDATED")),
             automatic_function_calling=types.AutomaticFunctionCallingConfig(disable=True),
         )
 

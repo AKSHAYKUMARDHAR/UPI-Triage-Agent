@@ -2,7 +2,7 @@
 import pytest
 
 from agent.guardrails import MAX_TOOL_CALLS, validate
-from categorizer import extract, rules
+from categorizer import categorize, extract, rules
 
 TAXONOMY = ["Groceries", "P2P Transfer", "Rent"]
 
@@ -57,3 +57,14 @@ def test_guardrails():
     assert validate({**ok, "confidence": True}, TAXONOMY) == ["bad_confidence"]
     assert validate({**ok, "reason": " "}, TAXONOMY) == ["empty_reason"]
     assert validate({**ok, "tool_calls": [{}] * (MAX_TOOL_CALLS + 1)}, TAXONOMY) == ["max_tool_calls"]
+
+
+@pytest.mark.parametrize("narration, category, above_gate", [
+    ("UPI/1/dinner/rahul.sha12@okaxis/HDFC", "P2P Transfer", True),         # social note: really P2P
+    ("UPI/1/house rent/rahul.sha12@okaxis/HDFC", "Rent", True),
+    ("UPI/1/school fees jan/rahul.sha12@okaxis/HDFC", "P2P Transfer", False),  # note the rules cannot read
+    ("UPI/1/Payment from Ph/rahul.sha12@okaxis/HDFC", "P2P Transfer", False),  # no note at all
+])
+def test_person_notes_only_auto_post_what_the_rules_understand(narration, category, above_gate):
+    p = categorize(narration)
+    assert p.category == category and (p.confidence >= 0.84) == above_gate
