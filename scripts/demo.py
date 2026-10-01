@@ -48,6 +48,30 @@ def up(url: str) -> bool:
         return False
 
 
+def gemini_quota_problem() -> str | None:
+    """One tiny request before recording: a used-up free daily quota would send every agent row
+    to review, which looks like a broken agent on camera. Returns a message, or None if fine."""
+    from agent import loop
+
+    agent_on = os.getenv("AGENT_ENABLED", "auto").lower() != "false" and loop.has_llm_credentials()
+    if loop.PROVIDER != "gemini" or not agent_on:
+        return None
+    from google import genai
+    from google.genai import errors
+
+    from agent.gemini_client import _daily_quota, api_key
+
+    client = genai.Client(api_key=api_key())  # keep a reference: the SDK closes its HTTP client on GC
+    try:
+        client.models.generate_content(model=loop.MODEL, contents="Reply OK")
+        return None
+    except errors.APIError as e:
+        if _daily_quota(e):
+            return (f"Gemini's free daily quota for {loop.MODEL} is used up. It resets at midnight Pacific "
+                    "time (about 12:30 PM IST). Until then every agent row would go to review.")
+        return f"Gemini check failed ({getattr(e, 'code', '?')}): {str(e)[:150]}"
+
+
 def start_api() -> subprocess.Popen | None:
     if up(f"{API}/health"):
         print("API: already running on :8000")
@@ -69,11 +93,16 @@ def main():
     ap.add_argument("--reset", action="store_true", help="clear results and review_queue first")
     ap.add_argument("--no-browser", action="store_true")
     ap.add_argument("--file", default=str(ROOT / "data" / "demo_statement.csv"))
+    ap.add_argument("--force", action="store_true", help="run even if the Gemini quota check fails")
     args = ap.parse_args()
 
     if not db.available():
         raise SystemExit("Postgres is not reachable: run `docker compose up -d` first")
     print("Postgres: up" + ("" if up(f"{N8N}/healthz") else "   (n8n is NOT up: the inbox trigger will not fire)"))
+    if problem := gemini_quota_problem():
+        print(f"\n{problem}")
+        if not args.force:
+            raise SystemExit("Not starting the demo. Record after the reset, or pass --force to run anyway.")
 
     proc = start_api()
     print("health:", http("GET", f"{API}/health"))
@@ -117,7 +146,12 @@ def main():
                                "GROUP BY 1").fetchall())
         review = conn.execute("SELECT count(*) FROM review_queue q JOIN results r USING (txn_id) "
                               "WHERE r.statement_id = 'DEMO' AND q.status = 'open'").fetchone()[0]
+        failed = conn.execute("SELECT count(*) FROM results WHERE statement_id = 'DEMO' AND reason LIKE %s",
+                              ("%llm_error%",)).fetchone()[0]
     print(f"\ndone in {int(time.time() - t0)}s: {rows} rows, decided by {by}, {review} waiting in {API}/review")
+    if failed:
+        print(f"WARNING: {failed} agent rows hit LLM errors (usually the free daily quota) and went to review. "
+              "Not a take to keep: run again after the quota resets.")
 
     if proc:
         try:

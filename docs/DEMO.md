@@ -7,8 +7,10 @@ payees the agent should flag, and one prompt-injection attempt the guard stops.
 
 ## Before you record (once, about 10 minutes)
 
-1. **Fresh Gemini quota.** The demo sends 9 rows to the agent, about 15 requests. Record on a
-   day you have not run the evals: the free tier allows only so many requests per day.
+1. **Fresh Gemini quota.** The demo sends 9 rows to the agent, about 15 requests. The free
+   daily quota resets at midnight Pacific time (about 12:30 PM IST); `scripts/demo.py` checks
+   it first and refuses to start if it is used up, because every agent row would then go to
+   review. If a run ever ends with an LLM-error warning, it is not a take to keep.
 2. **Stack up:** `docker compose up -d`. Open http://localhost:5678; the first visit asks you
    to create a local n8n owner account (it stays on your machine). Open the *UPI statement
    triage* workflow, then its *Executions* tab.
