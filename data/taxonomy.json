@@ -1,0 +1,23 @@
+{
+  "categories": [
+    "Food Delivery",
+    "Groceries",
+    "Dining",
+    "Fuel",
+    "Utilities",
+    "Mobile & Internet",
+    "Rent",
+    "P2P Transfer",
+    "Shopping",
+    "Travel",
+    "Entertainment & Subscriptions",
+    "Health & Pharmacy",
+    "Education",
+    "EMI & Loans",
+    "Salary & Income",
+    "Investments",
+    "Cash Withdrawal",
+    "Bank Charges"
+  ],
+  "fallback": "Uncategorized"
+}

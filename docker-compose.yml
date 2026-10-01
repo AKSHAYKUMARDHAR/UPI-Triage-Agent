@@ -1,0 +1,33 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_USER: triage
+      POSTGRES_PASSWORD: triage
+      POSTGRES_DB: triage
+    ports:
+      - "5433:5432"   # host 5433, so it never collides with a locally installed Postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+
+  n8n:
+    image: n8nio/n8n
+    ports:
+      - "5678:5678"
+    environment:
+      - GENERIC_TIMEZONE=Asia/Kolkata
+      # n8n 2.x disables the Local File Trigger and limits file access by default.
+      # Re-enable only the trigger (Execute Command stays blocked) and only for the inbox.
+      - NODES_EXCLUDE=["n8n-nodes-base.executeCommand"]
+      - N8N_RESTRICT_FILE_ACCESS_TO=/data/inbox
+    extra_hosts:
+      - "host.docker.internal:host-gateway"   # reach the API on the host (Linux needs this)
+    volumes:
+      - n8ndata:/home/node/.n8n
+      - ./data/inbox:/data/inbox
+      - ./n8n:/workflows:ro
+
+volumes:
+  pgdata:
+  n8ndata:

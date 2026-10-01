@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UPI Triage Review</title>
+<style>
+  :root {
+    --bg: #f6f7f9; --card: #ffffff; --ink: #1c2330; --muted: #5d6778; --line: #e3e6eb;
+    --accent: #2f6fde; --ok: #1d8a4e; --warn: #b26a00;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #12151b; --card: #1b2029; --ink: #e6e9ef; --muted: #9aa3b2; --line: #2b313c;
+            --accent: #6d9cff; --ok: #4cc488; --warn: #e0a243; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 14px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  header { padding: 20px 16px 8px; max-width: 1100px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 12px; align-items: baseline; }
+  h1 { font-size: 20px; margin: 0; }
+  .count { color: var(--muted); }
+  .spacer { flex: 1; }
+  button, select { font: inherit; color: inherit; background: var(--card); border: 1px solid var(--line); border-radius: 6px; padding: 6px 10px; }
+  button { cursor: pointer; }
+  button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  main { max-width: 1100px; margin: 0 auto; padding: 8px 16px 40px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 14px; margin-bottom: 10px; }
+  .narr { font-family: ui-monospace, Consolas, monospace; font-size: 13px; word-break: break-all; }
+  .meta { color: var(--muted); margin: 6px 0; }
+  .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 8px; }
+  .pill { display: inline-block; padding: 1px 8px; border-radius: 999px; border: 1px solid var(--line); font-size: 12px; color: var(--muted); }
+  details { margin-top: 8px; }
+  summary { cursor: pointer; color: var(--muted); }
+  pre { white-space: pre-wrap; word-break: break-word; font-size: 12px; background: var(--bg); padding: 8px; border-radius: 6px; margin: 6px 0 0; }
+  .done { color: var(--ok); }
+  .empty, .error { text-align: center; color: var(--muted); padding: 40px 0; }
+  .error { color: var(--warn); }
+</style>
+</head>
+<body>
+<header>
+  <h1>Review queue</h1>
+  <span class="count" id="count"></span>
+  <span class="spacer"></span>
+  <button id="refresh">Refresh</button>
+  <button id="export">Export reviewed as CSV</button>
+</header>
+<main id="list"><p class="empty">Loading...</p></main>
+
+<script>
+const list = document.getElementById("list");
+const count = document.getElementById("count");
+let taxonomy = [];
+
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"}[c]));
+
+async function api(path, opts) {
+  const res = await fetch(path, opts);
+  if (!res.ok) throw new Error((await res.json().catch(() => ({}))).detail || res.statusText);
+  return res.json();
+}
+
+function toolCalls(calls) {
+  if (!calls || !calls.length) return "";
+  const lines = calls.map((c) => `${c.ok ? "ok " : "ERR"} ${c.name}(${JSON.stringify(c.args || {})})\n    -> ${c.result || ""}`);
+  return `<details><summary>${calls.length} agent tool call${calls.length > 1 ? "s" : ""}</summary><pre>${esc(lines.join("\n"))}</pre></details>`;
+}
+
+function card(item) {
+  const options = taxonomy.map((t) => `<option ${t === item.suggested_category ? "selected" : ""}>${esc(t)}</option>`).join("");
+  const conf = typeof item.confidence === "number" ? item.confidence.toFixed(2) : "n/a";
+  const el = document.createElement("div");
+  el.className = "card";
+  el.innerHTML = `
+    <div class="narr">${esc(item.narration)}</div>
+    <div class="meta"><span class="pill">${esc(item.txn_id)}</span> <span class="pill">${esc(item.decided_by || "")}</span>
+      suggested <b>${esc(item.suggested_category || "none")}</b> at confidence ${conf}</div>
+    <div class="meta">${esc(item.reason)}</div>
+    ${toolCalls(item.tool_calls)}
+    <div class="row">
+      <select aria-label="Final category">${options}</select>
+      <button class="primary">Save</button>
+      <span class="status"></span>
+    </div>`;
+  const select = el.querySelector("select");
+  const button = el.querySelector("button");
+  const status = el.querySelector(".status");
+  button.onclick = async () => {
+    button.disabled = true;
+    try {
+      await api(`/api/review/${encodeURIComponent(item.txn_id)}`, {
+        method: "POST", headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({final_category: select.value}),
+      });
+      status.textContent = select.value === item.suggested_category ? "accepted" : "corrected";
+      status.className = "status done";
+      select.disabled = true;
+    } catch (e) {
+      status.textContent = e.message;
+      button.disabled = false;
+    }
+  };
+  return el;
+}
+
+async function load() {
+  try {
+    if (!taxonomy.length) taxonomy = await api("/api/taxonomy");
+    const items = await api("/api/review");
+    count.textContent = `${items.length} open`;
+    list.innerHTML = items.length ? "" : '<p class="empty">Nothing to review.</p>';
+    items.forEach((item) => list.appendChild(card(item)));
+  } catch (e) {
+    list.innerHTML = `<p class="error">${esc(e.message)}</p>`;
+  }
+}
+
+document.getElementById("refresh").onclick = load;
+document.getElementById("export").onclick = async () => {
+  const rows = await api("/api/reviewed");
+  const cols = ["txn_id", "narration", "suggested_category", "final_category", "status", "reviewed_at"];
+  const csv = [cols.join(",")].concat(rows.map((r) => cols.map((c) => `"${String(r[c] ?? "").replace(/"/g, '""')}"`).join(","))).join("\n");
+  const a = Object.assign(document.createElement("a"), {href: URL.createObjectURL(new Blob([csv], {type: "text/csv"})), download: "reviewed_labels.csv"});
+  a.click();
+};
+load();
+</script>
+</body>
+</html>

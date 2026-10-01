@@ -1,0 +1,61 @@
+name,vpa,category,description,tier
+Swiggy,swiggy.order@icici,Food Delivery,Online food ordering and delivery app,head
+Zomato,zomato.order@hdfcbank,Food Delivery,Restaurant food delivery app,head
+Blinkit,blinkit@ybl,Groceries,Quick-commerce grocery delivery in minutes,head
+Zepto,zepto.payments@axisbank,Groceries,10-minute grocery delivery app,head
+BigBasket,bigbasket@icici,Groceries,Online supermarket for groceries and staples,head
+DMart,avenuesupermarts@hdfcbank,Groceries,Hypermarket chain selling groceries and household goods,head
+Indian Oil,iocl.fuel@sbi,Fuel,Petrol pump fuel station,head
+HP Petrol,hpcl@ybl,Fuel,Hindustan Petroleum fuel station,head
+Bharat Petroleum,bpcl.fuel@icici,Fuel,Petrol and diesel fuel station,head
+BESCOM,bescom.bill@axisbank,Utilities,Bangalore electricity supply company bill payment,head
+BWSSB,bwssb@sbi,Utilities,Bangalore water supply and sewerage board bill,head
+Jio,jio.recharge@sbi,Mobile & Internet,Mobile recharge and fibre broadband,head
+Airtel,airtel.payments@airtel,Mobile & Internet,Mobile prepaid and postpaid plus broadband,head
+ACT Fibernet,actfibernet@icici,Mobile & Internet,Home broadband internet provider,head
+Amazon,amazon@apl,Shopping,Online marketplace for electronics and household goods,head
+Flipkart,flipkart.payments@axisbank,Shopping,E-commerce marketplace,head
+Myntra,myntra@icici,Shopping,Online fashion and clothing store,head
+Uber,uber.india@hdfcbank,Travel,Ride hailing cabs and autos,head
+Ola,olacabs@icici,Travel,Cab and auto rickshaw booking,head
+IRCTC,irctc.rail@sbi,Travel,Indian railways train ticket booking,head
+MakeMyTrip,makemytrip@icici,Travel,Flights hotels and holiday booking,head
+Netflix,netflix@hdfcbank,Entertainment & Subscriptions,Video streaming subscription,head
+Spotify,spotify.in@icici,Entertainment & Subscriptions,Music streaming subscription,head
+BookMyShow,bookmyshow@axisbank,Entertainment & Subscriptions,Movie and event tickets,head
+Apollo Pharmacy,apollopharmacy@icici,Health & Pharmacy,Pharmacy chain selling medicines,head
+PharmEasy,pharmeasy@ybl,Health & Pharmacy,Online medicine delivery,head
+Practo,practo@axisbank,Health & Pharmacy,Doctor consultations and diagnostics booking,head
+Unacademy,unacademy@icici,Education,Online learning and exam preparation,head
+Byjus,byjus@hdfcbank,Education,Online learning app for school students,head
+Bajaj Finserv,bajajfinserv.emi@icici,EMI & Loans,Consumer durable loan EMI,head
+HDFC Home Loan,hdfcltd.emi@hdfcbank,EMI & Loans,Home loan EMI payment,head
+Zerodha,zerodha.broking@icici,Investments,Stock broking and mutual fund platform,head
+Groww,groww.invest@axisbank,Investments,Mutual funds and stocks investment app,head
+Starbucks,tatastarbucks@icici,Dining,Coffee shop chain,head
+McDonald's,mcdonalds.india@hdfcbank,Dining,Fast food restaurant,head
+Sri Lakshmi Provision Stores,lakshmiprovisions@okaxis,Groceries,Neighbourhood kirana shop selling rice dal oil and daily essentials,tail
+Ganesh Kirana and General Stores,ganeshkirana@ybl,Groceries,Local general store for groceries and household items,tail
+Namma Fresh Vegetables,nammafreshveg@okicici,Groceries,Vegetable and fruit vendor,tail
+Hotel Annapoorna Veg,annapoornaveg@okhdfcbank,Dining,South Indian vegetarian restaurant serving meals and tiffin,tail
+Meghana Foods,meghanafoods@icici,Dining,Biryani restaurant,tail
+Chai Point Koramangala,chaipointkrm@ybl,Dining,Tea and snacks cafe,tail
+Shell Indiranagar,shellindiranagar@okaxis,Fuel,Shell petrol station in Indiranagar,tail
+Sai Ram Medicals,sairammedicals@okicici,Health & Pharmacy,Local chemist and medical store,tail
+Sparsh Hospital,sparshhospital@hdfcbank,Health & Pharmacy,Multi-speciality hospital billing,tail
+Cult Fit,cultfit@icici,Entertainment & Subscriptions,Gym and fitness classes membership,tail
+Akash Institute,aakashinst@axisbank,Education,Coaching institute for entrance exams,tail
+Sunrise Public School,sunriseschoolfees@sbi,Education,School tuition fee payment,tail
+Raju Auto Works,rajuautoworks@okaxis,Travel,Two-wheeler and car repair garage,tail
+Rapido,rapido.bike@ybl,Travel,Bike taxi rides,tail
+KSRTC,ksrtc.booking@sbi,Travel,Karnataka state bus ticket booking,tail
+Decathlon,decathlon.in@icici,Shopping,Sports goods and equipment store,tail
+Reliance Digital,reliancedigital@hdfcbank,Shopping,Electronics and appliances store,tail
+Lenskart,lenskart@axisbank,Shopping,Eyeglasses and contact lenses store,tail
+Urban Company,urbancompany@icici,Shopping,Home services such as cleaning salon and repairs,tail
+Nestaway,nestaway.rent@icici,Rent,Rental housing and monthly rent collection,tail
+NoBroker Rent Pay,nobroker.rentpay@axisbank,Rent,Rent payment to landlord via NoBroker,tail
+Tata Power DDL,tatapower@hdfcbank,Utilities,Electricity bill payment,tail
+Indane Gas,indanegas.booking@sbi,Utilities,LPG cooking gas cylinder booking,tail
+Kotak Credit Card,kotakcc.bill@kotak,EMI & Loans,Credit card bill payment,tail
+LIC Premium,licpremium@sbi,Investments,Life insurance premium payment,tail

@@ -1,0 +1,251 @@
+txn_id,date,narration,debit,credit,label,is_hard,merchant_hint
+G00000,2026-09-05,UPI/DR/125836504909/LAKSHMI BORA/ICICI/lakshmi.bor31@okaxis/movie,4212.0,,P2P Transfer,0,Lakshmi Bora
+G00001,2026-09-12,UPI/DR/312134286195/POOJA GUPTA/KOTAK/pooja.gup43@okicici/movie,4151.0,,P2P Transfer,0,Pooja Gupta
+G00002,2026-07-13,UPI-APOLLO PHARMACY-apollopharmacy@icici-AXIS4784-274020379980-Payment from Ph,814.78,,Health & Pharmacy,0,Apollo Pharmacy
+G00003,2026-07-02,UPI/324723016753/trip share/vikram.pat16@oksbi/HDFC,177.0,,P2P Transfer,0,Vikram Patel
+G00004,2026-09-22,UPI/244887153321/Payment from Ph/amit.iye4@okaxis/AXIS,973.0,,P2P Transfer,1,Amit Iyer
+G00005,2026-08-01,SMS CHARGES FOR QTR,408.53,,Bank Charges,0,BANK
+G00006,2026-09-15,UPI/800179058335/Payment from Ph/suresh.das85@okaxis/KOTAK,599.0,,P2P Transfer,1,Suresh Das
+G00007,2026-08-20,UPI/DR/641498230014/SPARSH HOSPITAL/SBI/sparshhospital@hdfcbank/Payment from Ph,4029.94,,Health & Pharmacy,1,Sparsh Hospital
+G00008,2026-07-21,UPI/514120347748/Payment from Ph/practo@axisbank/SBI,380.35,,Health & Pharmacy,1,pRACTO
+G00009,2026-08-31,UPI/228984097648/Payment from Ph/chaipointkrm@ybl/SBI,2982.11,,Dining,1,Chai Point Koramangala
+G00010,2026-07-16,NEFT CR-ICICI0000634-ACME TECHNOLOGIES PVT LTD-SALARY OCT,,99336.0,Salary & Income,0,ACME
+G00011,2026-08-11,UPI/DR/226121244980/SRI LAKSHMI PROVISIO/ICICI/lakshmiprovisions@okaxis/Payment from Ph,2350.26,,Groceries,1,Sri Lakshmi Provision Stores
+G00012,2026-08-14,UPI-INDANE GAS-indanegas.booking@sbi-ICICI2506-629456365989-Payment from Ph,4231.72,,Utilities,1,Indane Gas
+G00013,2026-07-14,UPI/DR/290052702941/MEERA RAO/ICICI/meera.rao96@oksbi/movie,4811.0,,P2P Transfer,0,Meera Rao
+G00014,2026-09-18,UPI-AMIT DAS-amit.das22@okicici-AXIS5451-593418115106-gift,4089.0,,P2P Transfer,0,Amit Das
+G00015,2026-07-05,UPI/172238522521/Payment from Ph/airtel.payments@airtel/AXIS,1707.86,,Mobile & Internet,0,Airtel
+G00016,2026-09-16,CHQ BOOK ISSUE CHARGES,316.21,,Bank Charges,0,BANK
+G00017,2026-09-23,UPI-JOSEPH GUPTA-joseph.gup51@okaxis-SBI5019-305260336984-house rent,9961.0,,Rent,1,Joseph Gupta
+G00018,2026-07-28,UPI-AKASH INSTITUTE-aakashinst@axisbank-YESB6388-111546128003-Payment from Ph,585.47,,Education,1,Akash Institute
+G00019,2026-09-10,UPI/676436903059/Payment from Ph/amazon@apl/ICICI,1759.74,,Shopping,0,Amazon
+G00020,2026-07-26,UPI/579989229289/Payment from Ph/bigbasket@icici/SBI,2922.36,,Groceries,0,BigBasket
+G00021,2026-08-06,UPI-ZEROD-zerodha.broking@icici-ICICI1348-523445855539-Payment from Ph,7621.0,,Investments,1,Zerod
+G00022,2026-07-09,UPI-SWIGGY-swiggy.order@icici-SBI1266-145215326988-Payment from Ph,1308.27,,Food Delivery,0,Swiggy
+G00023,2026-09-02,UPI-PRACTO-practo@axisbank-KOTAK6131-187618811784-Payment from Ph,1265.04,,Health & Pharmacy,0,Practo
+G00024,2026-07-02,UPI-SURESH DAS-suresh.das90@oksbi-HDFC1479-782632239717-Payment from Ph,1159.0,,P2P Transfer,1,Suresh Das
+G00025,2026-08-03,UPI/108545116763/Payment from Ph/unacademy@icici/YESB,3680.02,,Education,1,Unacade
+G00026,2026-07-10,NEFT CR-HDFC0000149-ACME TECHNOLOGIES PVT LTD-SALARY OCT,,115772.0,Salary & Income,0,ACME
+G00027,2026-09-20,UPI/DR/448434756858/APOLLO /ICICI/apollopharmacy@icici/Payment from Ph,2642.2,,Health & Pharmacy,1,Apollo 
+G00028,2026-08-31,UPI-RELIANCE DIGITAL-reliancedigital@hdfcbank-SBI6274-639711040614-Payment from Ph,1112.73,,Shopping,1,Reliance Digital
+G00029,2026-09-27,UPI-CULT FIT-cultfit@icici-YESB4373-370036930485-Payment from Ph,3212.76,,Entertainment & Subscriptions,1,Cult Fit
+G00030,2026-07-27,UPI-ZEPTO-zepto.payments@axisbank-HDFC6577-633383043918-Payment from Ph,2127.95,,Groceries,1,zEPTO
+G00031,2026-09-18,UPI/341076774208/Payment from Ph/joseph.pat41@okhdfcbank/SBI,4877.0,,P2P Transfer,1,Joseph Patel
+G00032,2026-07-14,UPI/214453933321/Payment from Ph/airtel.payments@airtel/ICICI,4283.67,,Mobile & Internet,1,Airel
+G00033,2026-09-09,UPI/596201374501/gift/kavya.sha59@okicici/SBI,636.0,,P2P Transfer,0,Kavya Sharma
+G00034,2026-07-13,UPI-BESCOM-bescom.bill@axisbank-SBI7058-581264645045-Payment from Ph,1961.58,,Utilities,0,BESCOM
+G00035,2026-07-14,UPI/643774849176/Payment from Ph/unacademy@icici/KOTAK,2689.46,,Education,1,Unacad
+G00036,2026-07-29,UPI/363136231916/rent/kavya.red29@okaxis/HDFC,10728.0,,Rent,1,Kavya Reddy
+G00037,2026-09-27,IMPS-531179962046-SNEHA NAIR-REFUND,,2228.0,P2P Transfer,1,IMPS
+G00038,2026-07-13,UPI-SHELL INDIRANAGAR-shellindiranagar@okaxis-SBI1050-755866646036-Payment from Ph,1590.44,,Fuel,1,Shell Indiranagar
+G00039,2026-07-24,UPI/DR/848677707360/HDFC HOME LOAN/HDFC/hdfcltd.emi@hdfcbank/Payment from Ph,21574.0,,EMI & Loans,0,HDFC Home Loan
+G00040,2026-09-15,UPI/DR/285014207734/SWIGGY/YESB/swiggy.order@icici/Payment from Ph,1948.53,,Food Delivery,0,Swiggy
+G00041,2026-07-30,UPI/DR/997842196541/SWIGGY/HDFC/swiggy.order@icici/Payment from Ph,1143.9,,Food Delivery,0,Swiggy
+G00042,2026-08-27,UPI/DR/981776552471/MEGHANA FOODS/YESB/meghanafoods@icici/Payment from Ph,3497.64,,Dining,1,Meghana Foods
+G00043,2026-09-23,UPI-MCDONAD'S-mcdonalds.india@hdfcbank-SBI9484-878682441404-Payment from Ph,2086.03,,Dining,1,McDonad's
+G00044,2026-07-19,IMPS-396837048522-JOSEPH DUTTA-REFUND,,1955.0,P2P Transfer,1,IMPS
+G00045,2026-07-04,ATW-486424XXXXXX3320-S1ANBL465-BANGALORE,5000.0,,Cash Withdrawal,0,ATM
+G00046,2026-09-19,UPI/DR/801702214503/UNACADEMY/HDFC/unacademy@icici/Payment from Ph,3359.87,,Education,0,Unacademy
+G00047,2026-07-06,UPI-IMRAN PATEL-imran.pat23@okhdfcbank-AXIS5526-745924539252-thanks,1581.0,,P2P Transfer,0,Imran Patel
+G00048,2026-07-19,UPI-KARTHIK SINGH-karthik.sin16@oksbi-HDFC9174-221497789523-cab,4640.0,,P2P Transfer,0,Karthik Singh
+G00049,2026-07-09,UPI/431410872798/Payment from Ph/cultfit@icici/AXIS,2822.13,,Entertainment & Subscriptions,1,Cult Fit
+G00050,2026-09-23,UPI/DR/637099375400/RAHUL RAO/SBI/rahul.rao6@okicici/cab,2180.0,,P2P Transfer,0,Rahul Rao
+G00051,2026-09-30,UPI/945930420480/loan return/priya.das18@okhdfcbank/KOTAK,4771.0,,P2P Transfer,0,Priya Das
+G00052,2026-08-01,UPI-AIRTEL-airtel.payments@airtel-AXIS6810-135299725337-Payment from Ph,4135.44,,Mobile & Internet,0,Airtel
+G00053,2026-08-11,UPI/290313161145/trip share/suresh.kha52@okaxis/KOTAK,3411.0,,P2P Transfer,0,Suresh Khan
+G00054,2026-09-19,UPI/431569427308/movie/vikram.bor99@okicici/SBI,1522.0,,P2P Transfer,0,Vikram Bora
+G00055,2026-09-26,UPI/862107163166/Payment from Ph/rapido.bike@ybl/SBI,468.35,,Travel,1,Rapido
+G00056,2026-09-17,UPI-IMRAN GUPTA-imran.gup55@oksbi-AXIS2448-128170300103-movie,3791.0,,P2P Transfer,0,Imran Gupta
+G00057,2026-09-18,ATW-476064XXXXXX9391-S1ANBL482-BANGALORE,1000.0,,Cash Withdrawal,0,ATM
+G00058,2026-07-07,UPI/606831708201/Payment from Ph/olacabs@icici/KOTAK,601.67,,Travel,1,oLA
+G00059,2026-07-08,UPI-NOBROKER RENT PAY-nobroker.rentpay@axisbank-YESB6428-630709538311-Payment from Ph,19047.0,,Rent,1,NoBroker Rent Pay
+G00060,2026-07-29,UPI/DR/914162802097/GROWW/AXIS/groww.invest@axisbank/Payment from Ph,8537.0,,Investments,0,Groww
+G00061,2026-09-01,ATW-439438XXXXXX6093-S1ANBL836-BANGALORE,500.0,,Cash Withdrawal,0,ATM
+G00062,2026-09-03,UPI/370998965801/rent/rohit.red9@okaxis/ICICI,20791.0,,Rent,1,Rohit Reddy
+G00063,2026-08-03,UPI-HOTEL ANNAPOORNA VEG-annapoornaveg@okhdfcbank-ICICI9957-306084111248-Payment from Ph,1377.66,,Dining,1,Hotel Annapoorna Veg
+G00064,2026-09-28,UPI/DR/998256702381/IMRAN BORA/YESB/imran.bor79@okaxis/Payment from Ph,895.0,,P2P Transfer,1,Imran Bora
+G00065,2026-09-28,UPI-OLA-olacabs@icici-AXIS7321-403515458920-Payment from Ph,2665.89,,Travel,1,oLA
+G00066,2026-09-22,UPI/DR/527625021878/IMRAN KHAN/HDFC/imran.kha55@okicici/Rent for flat,8920.0,,Rent,1,Imran Khan
+G00067,2026-08-28,IMPS-490442842971-VIKRAM RAO-REFUND,,2659.0,P2P Transfer,1,IMPS
+G00068,2026-07-09,UPI/DR/678558829300/SPOTIFY/AXIS/spotify.in@icici/Payment from Ph,3880.16,,Entertainment & Subscriptions,0,Spotify
+G00069,2026-09-23,UPI/966976359843/Payment from Ph/nobroker.rentpay@axisbank/ICICI,12161.0,,Rent,1,NoBroker Rent Pay
+G00070,2026-08-03,UPI/952580988064/Payment from Ph/hdfcltd.emi@hdfcbank/YESB,20792.0,,EMI & Loans,0,HDFC Home Loan
+G00071,2026-07-04,UPI/545945965879/Payment from Ph/urbancompany@icici/HDFC,1592.5,,Shopping,1,Urban Company
+G00072,2026-09-02,ATW-430369XXXXXX2581-S1ANBL781-BANGALORE,500.0,,Cash Withdrawal,0,ATM
+G00073,2026-07-14,IMPS-934613761882-KAVYA DUTTA-REFUND,,2407.0,P2P Transfer,1,IMPS
+G00074,2026-07-09,ATW-495441XXXXXX7292-S1ANBL873-BANGALORE,5000.0,,Cash Withdrawal,0,ATM
+G00075,2026-07-23,UPI/DR/939414972970/GANESH KIRANA AND GE/SBI/ganeshkirana@ybl/Payment from Ph,3816.74,,Groceries,1,Ganesh Kirana and General Stores
+G00076,2026-07-29,UPI-APOLLO PHRMACY-apollopharmacy@icici-YESB5687-583145608561-Payment from Ph,930.82,,Health & Pharmacy,1,Apollo Phrmacy
+G00077,2026-07-27,UPI/DR/740319572894/RELIANCE DIGITAL/HDFC/reliancedigital@hdfcbank/Payment from Ph,3646.68,,Shopping,1,Reliance Digital
+G00078,2026-07-24,UPI-SRI LAKSHMI PROVISIO-lakshmiprovisions@okaxis-HDFC6582-699441262694-Payment from Ph,1643.64,,Groceries,1,Sri Lakshmi Provision Stores
+G00079,2026-08-26,UPI/492354307922/gift/joseph.rao25@okicici/KOTAK,4018.0,,P2P Transfer,0,Joseph Rao
+G00080,2026-07-30,UPI/208655057550/Payment from Ph/bigbasket@icici/HDFC,607.28,,Groceries,0,BigBasket
+G00081,2026-07-21,UPI-ZOMATO-zomato.order@hdfcbank-SBI2113-874770981926-Payment from Ph,4153.34,,Food Delivery,1,zOMATO
+G00082,2026-09-05,NEFT CR-KOTAK0000689-ACME TECHNOLOGIES PVT LTD-SALARY OCT,,59312.0,Salary & Income,0,ACME
+G00083,2026-09-08,DEBIT CARD ANNUAL FEE,469.7,,Bank Charges,0,BANK
+G00084,2026-07-08,UPI-SNEHA SINGH-sneha.sin61@okhdfcbank-ICICI6481-385277765240-Payment from Ph,4446.0,,P2P Transfer,1,Sneha Singh
+G00085,2026-08-14,UPI/DR/642177847472/NETFLIX/HDFC/netflix@hdfcbank/Payment from Ph,2998.48,,Entertainment & Subscriptions,0,Netflix
+G00086,2026-08-31,IMPS-914317843435-POOJA REDDY-REFUND,,2674.0,P2P Transfer,1,IMPS
+G00087,2026-07-05,CHQ BOOK ISSUE CHARGES,45.68,,Bank Charges,0,BANK
+G00088,2026-07-26,UPI-SUNRISE PUBLIC SCHOO-sunriseschoolfees@sbi-HDFC1431-122453037344-Payment from Ph,1964.56,,Education,1,Sunrise Public School
+G00089,2026-09-09,UPI-ZOMATO-zomato.order@hdfcbank-AXIS7993-240425847832-Payment from Ph,272.55,,Food Delivery,0,Zomato
+G00090,2026-07-30,UPI/DR/354426003731/BOOKMYSHOW/HDFC/bookmyshow@axisbank/Payment from Ph,1570.34,,Entertainment & Subscriptions,0,BookMyShow
+G00091,2026-07-10,UPI/DR/894024587607/MCDONALD'S/ICICI/mcdonalds.india@hdfcbank/Payment from Ph,4459.59,,Dining,0,McDonald's
+G00092,2026-08-31,UPI/DR/422114338692/OLA/ICICI/olacabs@icici/Payment from Ph,2962.23,,Travel,1,oLA
+G00093,2026-08-07,UPI/DR/883589045562/ARJUN REDDY/SBI/arjun.red33@okicici/thanks,3912.0,,P2P Transfer,0,Arjun Reddy
+G00094,2026-07-07,ATW-469054XXXXXX5383-S1ANBL426-BANGALORE,500.0,,Cash Withdrawal,0,ATM
+G00095,2026-08-17,UPI-ZEROD-zerodha.broking@icici-ICICI3011-708776862156-Payment from Ph,17067.0,,Investments,1,Zerod
+G00096,2026-08-19,UPI/DR/645552284944/VIKRAM SHARMA/HDFC/vikram.sha31@oksbi/gift,1426.0,,P2P Transfer,0,Vikram Sharma
+G00097,2026-07-27,UPI-ZETO-zepto.payments@axisbank-HDFC4677-586983420526-Payment from Ph,124.06,,Groceries,1,Zeto
+G00098,2026-09-14,UPI/DR/769628583048/MCDONALD'/SBI/mcdonalds.india@hdfcbank/Payment from Ph,3442.96,,Dining,1,McDonald'
+G00099,2026-07-14,UPI-KOTAK CREDIT CARD-kotakcc.bill@kotak-YESB1935-902225212923-Payment from Ph,14720.0,,EMI & Loans,1,Kotak Credit Card
+G00100,2026-07-31,UPI/277210783177/cab/meera.pat60@oksbi/AXIS,3741.0,,P2P Transfer,0,Meera Patel
+G00101,2026-08-13,UPI/DR/374872779154/TATA POWER DDL/KOTAK/tatapower@hdfcbank/Payment from Ph,4281.31,,Utilities,1,Tata Power DDL
+G00102,2026-09-11,UPI/949588595357/trip share/priya.sin36@okhdfcbank/KOTAK,665.0,,P2P Transfer,0,Priya Singh
+G00103,2026-09-13,UPI-ADITYA IYER-aditya.iye57@oksbi-YESB4569-625526716471-rent,19032.0,,Rent,1,Aditya Iyer
+G00104,2026-07-09,CHQ BOOK ISSUE CHARGES,420.31,,Bank Charges,0,BANK
+G00105,2026-07-19,UPI-SPARSH HOSPITAL-sparshhospital@hdfcbank-YESB3858-349654519558-Payment from Ph,1197.55,,Health & Pharmacy,1,Sparsh Hospital
+G00106,2026-07-24,NEFT CR-ICICI0000217-ACME TECHNOLOGIES PVT LTD-SALARY OCT,,92368.0,Salary & Income,0,ACME
+G00107,2026-08-15,UPI/DR/885771584541/IMRAN SINGH/SBI/imran.sin41@okaxis/dinner,130.0,,P2P Transfer,0,Imran Singh
+G00108,2026-07-10,UPI/DR/587508586304/SAI RAM MEDICALS/HDFC/sairammedicals@okicici/Payment from Ph,1599.79,,Health & Pharmacy,1,Sai Ram Medicals
+G00109,2026-08-06,UPI/179095987464/Payment from Ph/sunriseschoolfees@sbi/YESB,3737.95,,Education,1,Sunrise Public School
+G00110,2026-08-07,UPI-SUNRISE PUBLIC SCHOO-sunriseschoolfees@sbi-SBI8711-816818841403-Payment from Ph,1534.04,,Education,1,Sunrise Public School
+G00111,2026-09-04,UPI/DR/766176194288/ANANYA GUPTA/ICICI/ananya.gup6@okhdfcbank/cab,2578.0,,P2P Transfer,0,Ananya Gupta
+G00112,2026-09-12,UPI-DIVYA NAIR-divya.nai49@okaxis-HDFC4679-188687690576-Payment from Ph,2849.0,,P2P Transfer,1,Divya Nair
+G00113,2026-08-10,UPI/DR/618003558802/LAKSHMI PATEL/YESB/lakshmi.pat94@okaxis/loan return,2626.0,,P2P Transfer,0,Lakshmi Patel
+G00114,2026-09-27,UPI-OLA-olacabs@icici-SBI2890-599207874339-Payment from Ph,1505.93,,Travel,0,Ola
+G00115,2026-08-27,UPI/818815592166/Payment from Ph/practo@axisbank/AXIS,1609.85,,Health & Pharmacy,0,Practo
+G00116,2026-08-13,UPI/832655945355/movie/kavya.sin17@okicici/ICICI,3989.0,,P2P Transfer,0,Kavya Singh
+G00117,2026-07-24,UPI/DR/643639830933/RAPIDO/YESB/rapido.bike@ybl/Payment from Ph,2292.42,,Travel,1,Rapido
+G00118,2026-09-09,NEFT CR-ICICI0000223-ACME TECHNOLOGIES PVT LTD-SALARY OCT,,73490.0,Salary & Income,0,ACME
+G00119,2026-09-06,UPI/DR/283352353879/FATIMA DUTTA/HDFC/fatima.dut13@okicici/movie,2599.0,,P2P Transfer,0,Fatima Dutta
+G00120,2026-09-30,IMPS-238960951474-SURESH DUTTA-REFUND,,1715.0,P2P Transfer,1,IMPS
+G00121,2026-08-27,UPI/150346377953/Payment from Ph/aakashinst@axisbank/HDFC,2677.99,,Education,1,Akash Institute
+G00122,2026-07-24,IMPS-419698854835-FATIMA DUTTA-REFUND,,490.0,P2P Transfer,1,IMPS
+G00123,2026-08-26,UPI/840322971247/cab/amit.pat11@okicici/YESB,1928.0,,P2P Transfer,0,Amit Patel
+G00124,2026-09-06,UPI-UBER-uber.india@hdfcbank-HDFC9481-475780834076-Payment from Ph,472.17,,Travel,0,Uber
+G00125,2026-08-05,UPI/DR/993533304572/LAKSHMI DAS/YESB/lakshmi.das42@oksbi/Payment from Ph,2181.0,,P2P Transfer,1,Lakshmi Das
+G00126,2026-08-06,UPI-POOJA GUPTA-pooja.gup13@okhdfcbank-AXIS4664-633752115043-Payment from Ph,4432.0,,P2P Transfer,1,Pooja Gupta
+G00127,2026-07-30,CHQ BOOK ISSUE CHARGES,568.8,,Bank Charges,0,BANK
+G00128,2026-07-04,UPI/978483659648/rent/vikram.red27@okicici/ICICI,21186.0,,Rent,1,Vikram Reddy
+G00129,2026-07-15,UPI-URBAN COMPANY-urbancompany@icici-AXIS5832-239676175735-Payment from Ph,1942.2,,Shopping,1,Urban Company
+G00130,2026-07-29,UPI-SNEHA RAO-sneha.rao56@oksbi-HDFC6795-837581750599-Payment from Ph,4028.0,,P2P Transfer,1,Sneha Rao
+G00131,2026-07-05,UPI/180646796671/loan return/karthik.iye65@okhdfcbank/YESB,4467.0,,P2P Transfer,0,Karthik Iyer
+G00132,2026-08-01,UPI/141343702227/Payment from Ph/tatastarbucks@icici/YESB,3792.78,,Dining,0,Starbucks
+G00133,2026-08-06,UPI/DR/995434140000/AMAZON/ICICI/amazon@apl/Payment from Ph,1223.18,,Shopping,0,Amazon
+G00134,2026-09-01,UPI/100919935099/Payment from Ph/avenuesupermarts@hdfcbank/AXIS,3862.92,,Groceries,0,DMart
+G00135,2026-08-31,UPI/793123068737/trip share/rohit.dut23@okaxis/KOTAK,3207.0,,P2P Transfer,0,Rohit Dutta
+G00136,2026-09-15,UPI/638954228613/Payment from Ph/irctc.rail@sbi/YESB,3942.67,,Travel,0,IRCTC
+G00137,2026-07-15,UPI-INDIAN OIL-iocl.fuel@sbi-ICICI7960-458402878622-Payment from Ph,4039.81,,Fuel,1,iNDIAN oIL
+G00138,2026-07-04,UPI/DR/759230984230/HP PETROL/AXIS/hpcl@ybl/Payment from Ph,1815.48,,Fuel,0,HP Petrol
+G00139,2026-08-21,UPI-PRACTO-practo@axisbank-AXIS7966-531262945087-Payment from Ph,1206.76,,Health & Pharmacy,1,pRACTO
+G00140,2026-07-29,UPI-DECATHLON-decathlon.in@icici-AXIS7714-435203422145-Payment from Ph,3287.71,,Shopping,1,Decathlon
+G00141,2026-07-03,UPI/243149903529/cab/ananya.pat27@okaxis/KOTAK,149.0,,P2P Transfer,0,Ananya Patel
+G00142,2026-07-26,UPI/DR/154352517291/ARJUN DUTTA/KOTAK/arjun.dut43@okhdfcbank/loan return,1842.0,,P2P Transfer,0,Arjun Dutta
+G00143,2026-08-17,IMPS-889671496622-KAVYA DAS-REFUND,,2424.0,P2P Transfer,1,IMPS
+G00144,2026-09-01,UPI/DR/213930687851/KOTAK CREDIT CARD/KOTAK/kotakcc.bill@kotak/Payment from Ph,3368.0,,EMI & Loans,1,Kotak Credit Card
+G00145,2026-08-18,UPI/135421921329/Payment from Ph/lakshmiprovisions@okaxis/SBI,1065.82,,Groceries,1,Sri Lakshmi Provision Stores
+G00146,2026-09-08,UPI/940540085985/maintenance+rent/vikram.dut35@okaxis/YESB,8544.0,,Rent,1,Vikram Dutta
+G00147,2026-08-08,UPI-VIKRAM REDDY-vikram.red95@oksbi-AXIS9394-455557887307-maintenance+rent,28074.0,,Rent,1,Vikram Reddy
+G00148,2026-07-12,UPI/514341509506/Payment from Ph/sparshhospital@hdfcbank/SBI,4362.91,,Health & Pharmacy,1,Sparsh Hospital
+G00149,2026-09-02,UPI/368463774884/Payment from Ph/uber.india@hdfcbank/AXIS,4088.19,,Travel,0,Uber
+G00150,2026-09-11,UPI/DR/947815156620/DIVYA PATEL/ICICI/divya.pat92@okaxis/cab,1881.0,,P2P Transfer,0,Divya Patel
+G00151,2026-09-01,UPI/DR/714590016113/MEGHANA FOODS/ICICI/meghanafoods@icici/Payment from Ph,3651.18,,Dining,1,Meghana Foods
+G00152,2026-08-13,UPI/DR/942066705144/ARJUN IYER/AXIS/arjun.iye52@oksbi/cab,2089.0,,P2P Transfer,0,Arjun Iyer
+G00153,2026-08-10,UPI/929827299135/trip share/priya.gup89@oksbi/KOTAK,2751.0,,P2P Transfer,0,Priya Gupta
+G00154,2026-09-04,ATW-442183XXXXXX8559-S1ANBL825-BANGALORE,5000.0,,Cash Withdrawal,0,ATM
+G00155,2026-07-15,UPI/DR/922571874623/ARJUN REDDY/HDFC/arjun.red55@okaxis/Payment from Ph,1027.0,,P2P Transfer,1,Arjun Reddy
+G00156,2026-08-07,UPI/DR/561911213065/BWSSB/AXIS/bwssb@sbi/Payment from Ph,2379.67,,Utilities,0,BWSSB
+G00157,2026-08-07,UPI-UBER-uber.india@hdfcbank-ICICI3318-815386118277-Payment from Ph,2783.35,,Travel,0,Uber
+G00158,2026-08-12,UPI/616475140380/Payment from Ph/nestaway.rent@icici/AXIS,13024.0,,Rent,1,Nestaway
+G00159,2026-07-02,ATW-421527XXXXXX9591-S1ANBL832-BANGALORE,5000.0,,Cash Withdrawal,0,ATM
+G00160,2026-09-27,UPI/DR/870138490771/DECATHLON/ICICI/decathlon.in@icici/Payment from Ph,339.03,,Shopping,1,Decathlon
+G00161,2026-07-25,UPI/478927911393/Payment from Ph/iocl.fuel@sbi/YESB,337.8,,Fuel,1,Indan Oil
+G00162,2026-09-21,UPI/545675823474/Payment from Ph/unacademy@icici/SBI,1403.65,,Education,0,Unacademy
+G00163,2026-09-14,UPI/DR/719604599091/ARJUN SINGH/HDFC/arjun.sin20@okaxis/trip share,3995.0,,P2P Transfer,0,Arjun Singh
+G00164,2026-07-30,UPI/623596154832/cab/suresh.gup74@okhdfcbank/ICICI,63.0,,P2P Transfer,0,Suresh Gupta
+G00165,2026-08-30,NEFT CR-KOTAK0000250-ACME TECHNOLOGIES PVT LTD-SALARY OCT,,51467.0,Salary & Income,0,ACME
+G00166,2026-07-07,SMS CHARGES FOR QTR,673.53,,Bank Charges,0,BANK
+G00167,2026-08-18,UPI/232113225931/Payment from Ph/unacademy@icici/ICICI,1498.82,,Education,0,Unacademy
+G00168,2026-08-25,UPI/DR/284491866933/FATIMA GUPTA/YESB/fatima.gup40@okhdfcbank/cab,3571.0,,P2P Transfer,0,Fatima Gupta
+G00169,2026-09-24,UPI/294768952147/movie/fatima.dut33@okaxis/HDFC,4284.0,,P2P Transfer,0,Fatima Dutta
+G00170,2026-08-16,UPI/112865310059/Payment from Ph/airtel.payments@airtel/ICICI,838.36,,Mobile & Internet,0,Airtel
+G00171,2026-09-16,UPI-CULT FIT-cultfit@icici-KOTAK1212-378811268484-Payment from Ph,1504.89,,Entertainment & Subscriptions,1,Cult Fit
+G00172,2026-09-30,UPI-HDFC HOME LOAN-hdfcltd.emi@hdfcbank-KOTAK1498-162815058136-Payment from Ph,22015.0,,EMI & Loans,0,HDFC Home Loan
+G00173,2026-09-08,IMPS-291084385591-FATIMA DUTTA-REFUND,,2637.0,P2P Transfer,1,IMPS
+G00174,2026-09-29,UPI/DR/559917229698/PRIYA GUPTA/HDFC/priya.gup4@okicici/Payment from Ph,2245.0,,P2P Transfer,1,Priya Gupta
+G00175,2026-08-12,UPI/DR/777123520968/LENSKART/YESB/lenskart@axisbank/Payment from Ph,1277.55,,Shopping,1,Lenskart
+G00176,2026-09-03,UPI-KARTHIK DUTTA-karthik.dut22@okhdfcbank-YESB2007-833742406026-movie,372.0,,P2P Transfer,0,Karthik Dutta
+G00177,2026-08-22,UPI-CHAI POINT KORAMANGA-chaipointkrm@ybl-YESB9281-317361977086-Payment from Ph,2017.56,,Dining,1,Chai Point Koramangala
+G00178,2026-09-11,UPI/DR/612567635503/SWIGGY/KOTAK/swiggy.order@icici/Payment from Ph,2540.09,,Food Delivery,0,Swiggy
+G00179,2026-07-12,NEFT CR-HDFC0000192-ACME TECHNOLOGIES PVT LTD-SALARY OCT,,54600.0,Salary & Income,0,ACME
+G00180,2026-08-01,UPI/DR/510761848676/ZOMATO/AXIS/zomato.order@hdfcbank/Payment from Ph,3557.77,,Food Delivery,0,Zomato
+G00181,2026-07-23,UPI-AIRTEL-airtel.payments@airtel-YESB5703-516840901117-Payment from Ph,3331.97,,Mobile & Internet,0,Airtel
+G00182,2026-07-12,UPI-PRCTO-practo@axisbank-AXIS5334-865618096024-Payment from Ph,829.92,,Health & Pharmacy,1,Prcto
+G00183,2026-07-20,UPI/139386888678/Payment from Ph/spotify.in@icici/KOTAK,2372.77,,Entertainment & Subscriptions,0,Spotify
+G00184,2026-08-13,UPI/850807134230/Payment from Ph/indanegas.booking@sbi/SBI,1974.99,,Utilities,1,Indane Gas
+G00185,2026-09-05,UPI-JOSEPH PATEL-joseph.pat96@okhdfcbank-SBI1515-612038505979-rent oct,32892.0,,Rent,1,Joseph Patel
+G00186,2026-07-14,UPI/823177617501/thanks/ananya.rao18@oksbi/KOTAK,1646.0,,P2P Transfer,0,Ananya Rao
+G00187,2026-07-24,UPI/DR/494763968269/RAHUL IYER/SBI/rahul.iye54@oksbi/Payment from Ph,2361.0,,P2P Transfer,1,Rahul Iyer
+G00188,2026-08-21,UPI/DR/895653750123/IMRAN SINGH/SBI/imran.sin59@oksbi/gift,2439.0,,P2P Transfer,0,Imran Singh
+G00189,2026-09-12,UPI/560024735712/Payment from Ph/amazon@apl/AXIS,4057.86,,Shopping,0,Amazon
+G00190,2026-07-26,UPI-RELIANCE DIGITAL-reliancedigital@hdfcbank-YESB9586-756642926570-Payment from Ph,782.08,,Shopping,1,Reliance Digital
+G00191,2026-07-12,ATW-417025XXXXXX6458-S1ANBL907-BANGALORE,500.0,,Cash Withdrawal,0,ATM
+G00192,2026-08-08,UPI/DR/261742492357/SPOTIFY/ICICI/spotify.in@icici/Payment from Ph,777.43,,Entertainment & Subscriptions,0,Spotify
+G00193,2026-07-01,UPI/268554842725/Payment from Ph/shellindiranagar@okaxis/YESB,1987.01,,Fuel,1,Shell Indiranagar
+G00194,2026-08-29,UPI-DECATHLON-decathlon.in@icici-AXIS7165-334929470169-Payment from Ph,2492.24,,Shopping,1,Decathlon
+G00195,2026-09-07,UPI-SNEHA KHAN-sneha.kha17@okhdfcbank-SBI7956-459803413866-Payment from Ph,3005.0,,P2P Transfer,1,Sneha Khan
+G00196,2026-07-10,UPI-ZOATO-zomato.order@hdfcbank-KOTAK7523-770021733788-Payment from Ph,1686.33,,Food Delivery,1,Zoato
+G00197,2026-08-06,UPI/DR/522365308579/VIKRAM RAO/YESB/vikram.rao25@okaxis/movie,2157.0,,P2P Transfer,0,Vikram Rao
+G00198,2026-09-26,UPI/611558223974/Payment from Ph/hdfcltd.emi@hdfcbank/HDFC,7416.0,,EMI & Loans,1,hdfc hOME lOAN
+G00199,2026-09-24,UPI-SURESH SHARMA-suresh.sha21@okhdfcbank-HDFC8964-601163836597-maintenance+rent,25653.0,,Rent,1,Suresh Sharma
+G00200,2026-08-17,UPI/DR/987355860045/IRCTC/AXIS/irctc.rail@sbi/Payment from Ph,3349.61,,Travel,0,IRCTC
+G00201,2026-08-13,UPI/524169298484/movie/karthik.pat47@okaxis/YESB,794.0,,P2P Transfer,0,Karthik Patel
+G00202,2026-09-17,SMS CHARGES FOR QTR,393.45,,Bank Charges,0,BANK
+G00203,2026-08-13,UPI-IMRAN KHAN-imran.kha7@oksbi-HDFC7050-501408720297-Payment from Ph,1299.0,,P2P Transfer,1,Imran Khan
+G00204,2026-08-15,UPI/DR/458401148762/RAHUL PATEL/SBI/rahul.pat35@okicici/movie,2999.0,,P2P Transfer,0,Rahul Patel
+G00205,2026-08-05,UPI/DR/899405317565/NEHA DUTTA/ICICI/neha.dut51@okicici/maintenance+rent,19640.0,,Rent,1,Neha Dutta
+G00206,2026-07-06,UPI/679049576655/Payment from Ph/flipkart.payments@axisbank/KOTAK,4069.97,,Shopping,0,Flipkart
+G00207,2026-08-13,UPI/DR/664281019592/BESCOM/YESB/bescom.bill@axisbank/Payment from Ph,3268.19,,Utilities,0,BESCOM
+G00208,2026-07-24,DEBIT CARD ANNUAL FEE,309.54,,Bank Charges,0,BANK
+G00209,2026-07-11,CHQ BOOK ISSUE CHARGES,494.88,,Bank Charges,0,BANK
+G00210,2026-08-30,UPI/369696988696/cab/lakshmi.red25@okhdfcbank/YESB,1902.0,,P2P Transfer,0,Lakshmi Reddy
+G00211,2026-07-24,UPI-UBER-uber.india@hdfcbank-HDFC7531-836593604664-Payment from Ph,3511.26,,Travel,0,Uber
+G00212,2026-09-20,UPI/401205055515/Rent for flat/aditya.sha53@okicici/SBI,24175.0,,Rent,1,Aditya Sharma
+G00213,2026-09-14,UPI/DR/770288584037/SRI LAKSHMI PROVISIO/SBI/lakshmiprovisions@okaxis/Payment from Ph,3202.18,,Groceries,1,Sri Lakshmi Provision Stores
+G00214,2026-08-26,UPI/DR/475135116891/MCDONALD'S/SBI/mcdonalds.india@hdfcbank/Payment from Ph,4187.23,,Dining,0,McDonald's
+G00215,2026-07-11,UPI/DR/791827355649/ZERODHA/AXIS/zerodha.broking@icici/Payment from Ph,9904.0,,Investments,1,zERODHA
+G00216,2026-09-18,UPI-BOOKMYSHOW-bookmyshow@axisbank-HDFC3554-613998069563-Payment from Ph,3388.82,,Entertainment & Subscriptions,0,BookMyShow
+G00217,2026-09-07,UPI-POOJA GUPTA-pooja.gup73@oksbi-AXIS4845-918433675644-Payment from Ph,1908.0,,P2P Transfer,1,Pooja Gupta
+G00218,2026-09-09,UPI/DR/275513380246/HP PE/YESB/hpcl@ybl/Payment from Ph,2585.52,,Fuel,1,HP Pe
+G00219,2026-09-03,UPI-PRACTO-practo@axisbank-YESB6206-218671130355-Payment from Ph,1283.8,,Health & Pharmacy,0,Practo
+G00220,2026-07-01,UPI-PHARMEASY-pharmeasy@ybl-AXIS5725-297024503212-Payment from Ph,2109.06,,Health & Pharmacy,0,PharmEasy
+G00221,2026-08-23,UPI/211270924133/Payment from Ph/ksrtc.booking@sbi/AXIS,2966.61,,Travel,1,KSRTC
+G00222,2026-07-22,UPI/456580355221/Payment from Ph/amazon@apl/KOTAK,2714.07,,Shopping,1,Aazon
+G00223,2026-07-21,UPI/707262588661/maintenance+rent/fatima.bor12@okhdfcbank/KOTAK,30958.0,,Rent,1,Fatima Bora
+G00224,2026-07-27,UPI-FLIPKART-flipkart.payments@axisbank-HDFC1506-422692274853-Payment from Ph,4149.38,,Shopping,1,fLIPKART
+G00225,2026-07-21,UPI-IMRAN NAIR-imran.nai88@oksbi-HDFC6427-806523043344-Payment from Ph,4367.0,,P2P Transfer,1,Imran Nair
+G00226,2026-08-03,UPI-BIGBASKE-bigbasket@icici-HDFC7833-524609782559-Payment from Ph,3907.1,,Groceries,1,BigBaske
+G00227,2026-09-07,NEFT CR-YESB0000895-ACME TECHNOLOGIES PVT LTD-SALARY OCT,,88558.0,Salary & Income,0,ACME
+G00228,2026-09-04,UPI/146251478553/movie/imran.rao93@okaxis/SBI,3597.0,,P2P Transfer,0,Imran Rao
+G00229,2026-09-23,UPI/970819986023/house rent/imran.kha16@okaxis/HDFC,17895.0,,Rent,1,Imran Khan
+G00230,2026-09-27,UPI/DR/386719048374/HDFC H/SBI/hdfcltd.emi@hdfcbank/Payment from Ph,22145.0,,EMI & Loans,1,HDFC H
+G00231,2026-07-29,UPI/DR/671866408499/MYNTRA/SBI/myntra@icici/Payment from Ph,2691.15,,Shopping,0,Myntra
+G00232,2026-09-30,CHQ BOOK ISSUE CHARGES,229.05,,Bank Charges,0,BANK
+G00233,2026-08-19,UPI/259465921249/Payment from Ph/hdfcltd.emi@hdfcbank/KOTAK,7170.0,,EMI & Loans,0,HDFC Home Loan
+G00234,2026-09-04,UPI/DR/115394171137/SHELL INDIRANAGAR/SBI/shellindiranagar@okaxis/Payment from Ph,2641.21,,Fuel,1,Shell Indiranagar
+G00235,2026-09-01,UPI/653417747968/Payment from Ph/joseph.kha62@okicici/SBI,1903.0,,P2P Transfer,1,Joseph Khan
+G00236,2026-07-29,UPI/172786588537/Payment from Ph/joseph.rao23@oksbi/SBI,1581.0,,P2P Transfer,1,Joseph Rao
+G00237,2026-07-26,UPI-HP PETROL-hpcl@ybl-KOTAK4741-962510592818-Payment from Ph,1630.0,,Fuel,0,HP Petrol
+G00238,2026-07-11,UPI/DR/706756358788/NOBROKER RENT PAY/KOTAK/nobroker.rentpay@axisbank/Payment from Ph,11897.0,,Rent,1,NoBroker Rent Pay
+G00239,2026-08-01,NEFT CR-AXIS0000680-ACME TECHNOLOGIES PVT LTD-SALARY OCT,,81836.0,Salary & Income,0,ACME
+G00240,2026-07-25,UPI/706731833570/Payment from Ph/flipkart.payments@axisbank/SBI,831.34,,Shopping,1,fLIPKART
+G00241,2026-09-07,UPI/DR/935739120643/ARJUN IYER/KOTAK/arjun.iye67@okhdfcbank/rent oct,20535.0,,Rent,1,Arjun Iyer
+G00242,2026-07-26,NEFT CR-SBI0000908-ACME TECHNOLOGIES PVT LTD-SALARY OCT,,90712.0,Salary & Income,0,ACME
+G00243,2026-09-21,UPI/DR/574944843229/HDFCHOME LOAN/HDFC/hdfcltd.emi@hdfcbank/Payment from Ph,11099.0,,EMI & Loans,1,HDFCHome Loan
+G00244,2026-09-03,UPI-BAJAJ FINSERV-bajajfinserv.emi@icici-ICICI6384-793605457631-Payment from Ph,13994.0,,EMI & Loans,0,Bajaj Finserv
+G00245,2026-08-09,UPI/DR/402112905677/NOBROKER RENT PAY/YESB/nobroker.rentpay@axisbank/Payment from Ph,26416.0,,Rent,1,NoBroker Rent Pay
+G00246,2026-09-25,UPI-SNEHA IYER-sneha.iye63@okaxis-ICICI2074-278223052089-loan return,3814.0,,P2P Transfer,0,Sneha Iyer
+G00247,2026-07-28,UPI/DR/955529978240/BYJUS/HDFC/byjus@hdfcbank/Payment from Ph,3103.84,,Education,0,Byjus
+G00248,2026-08-11,UPI-LIC PREMIUM-licpremium@sbi-ICICI3532-773998701510-Payment from Ph,5779.0,,Investments,1,LIC Premium
+G00249,2026-08-04,UPI/DR/819294387419/BWSSB/KOTAK/bwssb@sbi/Payment from Ph,2761.15,,Utilities,0,BWSSB

@@ -1,0 +1,15 @@
+.venv/
+.venv-*/
+__pycache__/
+*.pyc
+.env
+data/statements.csv
+data/golden_set.csv.bak
+eval/predictions_*.csv
+rag/index/
+.DS_Store
+.pytest_cache/
+data/inbox/*.csv
+data/.*.tmp
+data/review_queue.jsonl
+eval/results/decisions_*_limit*.jsonl
