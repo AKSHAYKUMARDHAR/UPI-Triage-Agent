@@ -61,6 +61,32 @@ no note (confidence 0.80). They were all correct here, but the generator never p
 without a note, so the golden set cannot measure the risk that gate guards against. The
 default stays at 0.84; it is a policy decision, not a tuning one.
 
+### Held-out set: what the system has never seen
+
+`data/holdout_set.csv`: 57 hand-written rows, built independently of the rules and the RAG
+directory (no merchant in it appears in `merchants.csv` or the rules brand map). Families:
+25 unseen national brands, 7 unseen local merchants, 6 cryptic payees (BharatPe/Paytm QR,
+"SKR ENTERPRISES"), 9 person payments with hand-written notes ("rnt", "pg fees", "tuition"),
+8 bank formats the generator never produces (POS, BIL/ONL, ACH, NACH, NEFT rent, interest,
+card AMC, a refund credit) and 2 prompt-injection narrations. 9 rows are marked
+`expect_review`: the narration does not hold enough evidence, so the right answer is review.
+
+| Version | Accuracy | Automation | Precision (automated) | Unknowns sent to review | Unknowns auto-posted wrong |
+|---|---|---|---|---|---|
+| A: baseline | 42.1% | 24.6% | **64.3%** | 88.9% | 0.0% |
+| B: A + agent, no RAG | _pending_ | | | | |
+| C: A + agent + RAG | _pending_ | | | | |
+
+**Version A, held out.** Precision on automated rows falls from 100% to 64.3%: 5 of 14
+auto-posted rows are wrong, and all 5 come from one rule. A person payment with a note the
+rule does not recognise ("rnt", "flat maint", "tuition", "doctor consultation", "milk sept")
+is posted as P2P Transfer at confidence 0.90, above the gate, so neither the agent nor a human
+ever sees it. The note is evidence the rule cannot read; that confidence should sit below the
+gate. Unseen brands are never auto-posted (0% automation), which is safe but leaves all 25
+for the agent: B shows what the model knows on its own, C whether a directory that does not
+contain them pulls it toward a wrong near match ("TATA PLAY DTH" vs "Tata Power DDL").
+Run: `python -m eval.predict_agent --version C --gold data/holdout_set.csv`.
+
 ## Setup
 
 Python **3.12** (PyTorch / sentence-transformers wheels lag the newest Python).
