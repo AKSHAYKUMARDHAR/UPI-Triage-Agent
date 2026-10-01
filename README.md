@@ -36,14 +36,33 @@ share one tool implementation.
 ## Results
 
 Golden set: 250 synthetic rows, 121 marked hard (typos, truncated names, small local
-merchants, P2P payments that are really rent). Gate 0.84 for all versions.
+merchants, P2P payments that are really rent). Gate 0.84 for all versions. B and C ran on
+`gemini-3.1-flash-lite` (Gemini free tier), prompt v2, same day, same 73 rows sent to the agent.
 Every number below comes from an eval run logged in [eval/results/runs.jsonl](eval/results/runs.jsonl).
 
 | Version | Accuracy | Automation rate | Precision (automated) | Review rate | Hard-row accuracy | Tool-call errors | Cost / 100 rows | Latency / 100 rows |
 |---|---|---|---|---|---|---|---|---|
 | A: baseline | 93.2% | 70.8% | 100.0% | 29.2% | 86.0% | 0 | $0 | 0.14 s warm (7.1 s incl. model load via MCP) |
-| B: A + agent, no RAG | _pending_ | | | | | | | |
-| C: A + agent + RAG | _pending_ | | | | | | | |
+| B: A + agent, no RAG | 96.4% | 99.2% | 97.2% | 0.8% | 92.6% | 1 | $0 free tier (27k input + 1.4k output tokens) | 190 s wall, set by the free tier's 10 requests/min |
+| C: A + agent + RAG | 99.2% | 99.6% | 99.6% | 0.4% | 98.3% | 1 | $0 free tier (59k input + 2.0k output tokens) | 335 s wall, set by the free tier's 10 requests/min |
+
+**B and C, read honestly.** The agent absorbs almost all of A's review load (29.2% → 0.4%
+for C) and every error it makes sits on a label the golden-set review below already flagged
+as debatable. Outside those rows neither version made a mistake.
+- *IMPS "REFUND" credits* (draft label P2P Transfer): B called 7 of 9 Salary & Income, C 2.
+  C never looked a refund row up, so that gap is the model's run-to-run variance, not RAG.
+- *Cult Fit and LIC premium*: B said Health and EMI & Loans, C matched the directory's
+  Entertainment & Subscriptions and Investments. This is RAG's real contribution here: it
+  supplies the house conventions for ambiguous categories. Recognising merchants was not the
+  problem; the model already knows Indane, Decathlon and Rapido. C looked up 55 of 73 rows.
+- *Calibration is the open question.* Neither version flagged a single row for review on its
+  own, and most answers came with confidence 0.95-1.0. Near-total automation on rows an LLM
+  finds easy says little about rows it does not know; the held-out set below measures that.
+- *Tool-call errors*: one per version, both a confidence returned as the string "0.85".
+  Gemini does not enforce the tool schema the way Claude's strict mode does; the guardrail
+  caught it and sent the row to review.
+- *Cost and latency*: $0 on the free tier; wall time is the 10 requests/minute throttle, not
+  compute. C uses about twice B's tokens for the extra lookup turn.
 
 **Version A, read honestly.** Every automated answer was correct, and all 17 errors were in
 rows the gate sent to review, so nothing wrong was auto-posted. That precision comes partly
