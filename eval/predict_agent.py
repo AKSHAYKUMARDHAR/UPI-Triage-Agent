@@ -7,6 +7,8 @@ Usage:
   python -m eval.predict_agent --version C --limit 20   # cheap smoke run first
   python -m eval.predict_agent --version C --resume     # rerun only rows that hit LLM errors
                                                         # (e.g. a free-tier daily quota), keep the rest
+  python -m eval.predict_agent --version C --rerun H056,H057   # recompute these rows, keep the rest
+                                                        # (after a change that only affects them)
 
 Only txn_id, narration and amount reach the pipeline. `label` and `merchant_hint` are read
 by the scorer afterwards, never by the agent.
@@ -38,7 +40,10 @@ def main():
     ap.add_argument("--gold", default=str(ROOT / "data" / "golden_set.csv"))
     ap.add_argument("--resume", action="store_true",
                     help="keep rows from the last run of this version that succeeded on the same model")
+    ap.add_argument("--rerun", default="", help="comma-separated txn_ids to recompute; implies --resume")
     args = ap.parse_args()
+    rerun = {t.strip() for t in args.rerun.split(",") if t.strip()}
+    args.resume = args.resume or bool(rerun)
 
     use_agent, use_rag = {"A": (False, False), "B": (True, False), "C": (True, True)}[args.version]
     if use_agent and not loop.has_llm_credentials():
@@ -59,7 +64,7 @@ def main():
         for line in previous.read_text(encoding="utf-8").splitlines():
             d = json.loads(line)
             same_model = d["decided_by"] == "baseline" or d.get("model") == loop.MODEL
-            if same_model and "llm_error" not in d["violations"]:
+            if same_model and "llm_error" not in d["violations"] and d["txn_id"] not in rerun:
                 kept[d["txn_id"]] = d
     todo = [r for r in rows if r["txn_id"] not in kept]
     if args.resume:
@@ -89,13 +94,15 @@ def main():
     with open(out_csv, newline="", encoding="utf-8") as f:
         metrics = score(gold, {r["txn_id"]: r for r in csv.DictReader(f)})
     agent_rows = [d for d in decisions if d["decided_by"] == "agent"]
+    llm_errors = sum("llm_error" in d["violations"] for d in decisions)
     manifest = {
         "at": datetime.now(timezone.utc).isoformat(timespec="seconds"), "version": args.version, "gold": gold_stem,
         "rows": len(rows), "gate": loop.CONFIDENCE_GATE,
         "provider": loop.PROVIDER if use_agent else None, "model": loop.MODEL if use_agent else None,
         "effort": loop.EFFORT if use_agent else None,
         "prompt_version": loop.PROMPT_VERSION if use_agent else None, "transport": loop.TOOLS_TRANSPORT,
-        "agent_rows": len(agent_rows), "resumed_rows": len(kept),
+        "agent_rows": len(agent_rows), "resumed_rows": len(kept), "rerun_rows": sorted(rerun),
+        "llm_errors": llm_errors,
         "cost_usd": round(sum(d["cost_usd"] for d in decisions), 4),
         "cost_per_100_rows": round(sum(d["cost_usd"] for d in decisions) / len(rows) * 100, 4),
         "wall_s": round(wall, 1), "wall_per_100_rows_s": round(wall / len(rows) * 100, 2),
@@ -107,7 +114,6 @@ def main():
 
     print(f"wrote {out_csv.relative_to(ROOT)} ({len(rows)} rows, {len(agent_rows)} sent to the agent, "
           f"{wall:.1f}s wall, ${manifest['cost_usd']:.4f})")
-    llm_errors = sum("llm_error" in d["violations"] for d in decisions)
     if llm_errors:
         print(f"WARNING: {llm_errors} rows hit LLM errors (quota or rate limit?) and were routed to review; "
               f"see eval/results/decisions_{suffix}.jsonl. Re-run later for clean numbers.")

@@ -309,7 +309,14 @@ async def triage_async(rows: list[dict], use_agent: bool = True, use_rag: bool =
         decisions: list = [None] * len(rows)
         pending = []
         for i, (row, b) in enumerate(zip(rows, base)):
-            if b["confidence"] >= CONFIDENCE_GATE:
+            if hit := guardrails.suspicious_narration(row["narration"]):
+                # Never hand a narration that tries to instruct the model to the model.
+                d = _baseline_decision(row, b, routed=True, latency=base_latency)
+                d.update(violations=["suspected_injection"],
+                         reason=f"narration contains instruction-like text ('{hit}'): sent to review, "
+                                f"not to the LLM; baseline: {b['reason']}")
+                decisions[i] = d
+            elif b["confidence"] >= CONFIDENCE_GATE:
                 decisions[i] = _baseline_decision(row, b, routed=False, latency=base_latency)
             elif not use_agent:
                 decisions[i] = _baseline_decision(row, b, routed=True, latency=base_latency)
