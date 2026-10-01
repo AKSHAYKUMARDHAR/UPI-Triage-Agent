@@ -56,14 +56,10 @@ def main():
     rows = [{k: r[k] for k in INPUT_COLS} for r in gold_rows]  # the only columns the agent sees
 
     gold_stem = Path(args.gold).stem
-    # Labels made from a real statement live in private/ (gitignored); so do their results, which
-    # carry narrations and payee names. Only synthetic sets write to the tracked eval/results/.
-    private = (ROOT / "private").resolve() in Path(args.gold).resolve().parents
-    results_dir = ROOT / "private" / "results" if private else RESULTS
     suffix = (args.version + ("" if gold_stem == "golden_set" else f"_{gold_stem.removesuffix('_set')}")
               + (f"_limit{args.limit}" if args.limit else ""))
     kept = {}
-    previous = results_dir / f"decisions_{suffix}.jsonl"
+    previous = RESULTS / f"decisions_{suffix}.jsonl"
     if args.resume and previous.exists():
         for line in previous.read_text(encoding="utf-8").splitlines():
             d = json.loads(line)
@@ -79,7 +75,7 @@ def main():
     wall = time.perf_counter() - t0
     by_id = {**kept, **{d["txn_id"]: d for d in fresh}}
     decisions = [by_id[r["txn_id"]] for r in rows]
-    out_csv = (results_dir if private else ROOT / "eval") / f"predictions_{suffix}.csv"
+    out_csv = ROOT / "eval" / f"predictions_{suffix}.csv"
     with open(out_csv, "w", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
         w.writerow(["txn_id", "predicted", "confidence", "routed_to_review", "stage", "decided_by", "reason",
@@ -89,8 +85,8 @@ def main():
             w.writerow([d["txn_id"], d["category"], round(conf, 4), int(d["routed_to_review"]), d["stage"],
                         d["decided_by"], d["reason"], d["tool_errors"], d["cost_usd"], d["latency_s"]])
 
-    results_dir.mkdir(parents=True, exist_ok=True)
-    with open(results_dir / f"decisions_{suffix}.jsonl", "w", encoding="utf-8") as f:
+    RESULTS.mkdir(exist_ok=True)
+    with open(RESULTS / f"decisions_{suffix}.jsonl", "w", encoding="utf-8") as f:
         for d in decisions:
             f.write(json.dumps(d, ensure_ascii=False, default=str) + "\n")
 
@@ -113,15 +109,14 @@ def main():
         "tool_errors": sum(d["tool_errors"] for d in decisions),
         **{k: round(v, 4) for k, v in metrics.items() if isinstance(v, float)},
     }
-    with open(results_dir / "runs.jsonl", "a", encoding="utf-8") as f:
+    with open(RESULTS / "runs.jsonl", "a", encoding="utf-8") as f:
         f.write(json.dumps(manifest) + "\n")
 
     print(f"wrote {out_csv.relative_to(ROOT)} ({len(rows)} rows, {len(agent_rows)} sent to the agent, "
           f"{wall:.1f}s wall, ${manifest['cost_usd']:.4f})")
     if llm_errors:
         print(f"WARNING: {llm_errors} rows hit LLM errors (quota or rate limit?) and were routed to review; "
-              f"see {(results_dir / f'decisions_{suffix}.jsonl').relative_to(ROOT).as_posix()}. "
-              "Re-run later for clean numbers.")
+              f"see eval/results/decisions_{suffix}.jsonl. Re-run later for clean numbers.")
     gold_flag = "" if gold_stem == "golden_set" else f" --gold {Path(args.gold).as_posix()}"
     print(f"score it: python -m eval.run_eval {out_csv.relative_to(ROOT).as_posix()}{gold_flag} --sweep")
 

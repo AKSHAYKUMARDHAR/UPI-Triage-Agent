@@ -2,31 +2,28 @@
 
 An AI agent that categorizes Indian bank-statement (UPI) transactions. A cheap baseline
 (rules + extraction + SBERT) handles what it is sure about. Everything below a confidence
-gate goes to an **LLM agent** (Claude, or Gemini's free tier) that calls tools over **MCP**,
-looks up unknown merchants with **RAG** (pgvector), and sends anything it is still unsure
-about to a **human review queue**. An **n8n** workflow triggers the pipeline when a statement
-lands, and an **evaluation harness** decides whether each version is good enough to ship.
-It reads real netbanking exports (CSV / XLS / XLSX) and masks personal details before any
-LLM call.
+gate goes to an **LLM agent** (Claude, or Gemini's free tier) that calls tools over **MCP**, looks up unknown merchants
+with **RAG** (pgvector), and sends anything it is still unsure about to a **human review
+queue**. An **n8n** workflow triggers the pipeline when a statement lands, and an
+**evaluation harness** decides whether each version is good enough to ship.
 
-All data in this repo is synthetic. No real customer, client or employer data is used.
+All data is synthetic. No real customer, client or employer data is used.
 
 ## Architecture
 
 ```
- Bank statement (CSV / XLS / XLSX) dropped in data/inbox/
+ Statement CSV dropped in data/inbox/
           │
-        n8n  (Local File Trigger → upload → POST /triage/file → IF to_review > 0 → alert)
+        n8n  (Local File Trigger → parse CSV → POST /triage → IF to_review > 0 → alert)
           │
           ▼
-   FastAPI /triage/file  (api/main.py) ────────► Postgres: results, review_queue
-          │  ingest/: find the table, map columns   ▲
-          │  injection guard, privacy redaction     │  accept / correct
-          ▼                                         │
+   FastAPI /triage  (api/main.py) ─────────────► Postgres: results, review_queue
+          │                                         ▲
+          ▼                                         │  accept / correct
    agent/loop.py   ── MCP client (stdio) ──►  mcp_server/server.py
           │                                    ├─ categorize_transactions  rules → extract → SBERT
           │  confidence ≥ gate: accept          ├─ lookup_merchant          RAG over merchants (pgvector)
-          │  confidence < gate: LLM ───tools──►├─ flag_for_review          review queue
+          │  confidence < gate: Claude ─tools──►├─ flag_for_review          review queue
           │                                    └─ get_taxonomy
           ▼
    decision + audit trail (every tool call, tokens, cost, latency)
@@ -60,7 +57,7 @@ card AMC, a refund credit) and 2 prompt-injection narrations. 9 rows are marked
 | Version | Accuracy | Automation | Precision (automated) | Unknowns sent to review | Unknowns auto-posted wrong |
 |---|---|---|---|---|---|
 | A: baseline, before the fixes | 42.1% | 24.6% | 64.3% | 88.9% | 0.0% |
-| A: baseline | 43.9% | 12.3% | 100.0% | 100.0% | 0.0% |
+| A: baseline | 42.1% | 12.3% | 100.0% | 100.0% | 0.0% |
 | B: A + agent, no RAG | 89.5% | 94.7% | 90.7% | 22.2% | 44.4% |
 | C: A + agent + RAG | 91.2% | 86.0% | **98.0%** | 77.8% | **0.0%** |
 
@@ -90,10 +87,7 @@ card AMC, a refund credit) and 2 prompt-injection narrations. 9 rows are marked
 - *Caveat*: both bugs were found on this set, so the rows they touch no longer give an
   unbiased "after" number; the "before" row stays for that reason. The B and C decisions for
   the two injection rows were recomputed after the guard (`--rerun H056,H057`, no LLM call);
-  the other 55 rows come from the runs just before it, which already had the note fix. The
-  real-statement parser came after B and C: it changed no auto-posted row, but 5 rows that
-  reach the agent now carry a baseline guess instead of "Uncategorized" (A's accuracy 42.1% to
-  43.9%), so B and C on this set would need a re-run to reflect it.
+  the other 55 rows come from the runs just before it, which already had the note fix.
 
 ### Golden set: 250 synthetic rows
 
@@ -155,7 +149,7 @@ copy .env.example .env                        # add a free GEMINI_API_KEY (or AN
 docker compose up -d                          # Postgres+pgvector on :5433, n8n on :5678
 python data/generator.py                      # statements.csv + golden_set.csv
 python -m rag.build_index                     # merchant embeddings -> pgvector + rag/index/
-pytest                                        # 72 tests, no API key needed
+pytest                                        # 43 tests, no API key needed
 ```
 
 Postgres is published on host port **5433** so it never collides with a locally installed
@@ -174,39 +168,6 @@ Postgres on 5432.
 | MCP in Claude Code | `claude mcp add upi-triage -- <repo>\.venv\Scripts\python.exe -m mcp_server.server` (run from the repo root) |
 | Rule coverage | `python -m categorizer.rules data/statements.csv` |
 
-## Using a real bank statement
-
-The pipeline reads the CSV / XLS / XLSX statement you download from netbanking. Instead of one
-parser per bank, [ingest/](ingest/) finds the transaction table (it skips title rows and summary
-blocks), maps the columns by name ("Narration" / "Description" / "Particulars" / "Transaction
-Remarks", "Withdrawal Amt." / "Debit" / "DR", or one "Amount" column with a Dr/Cr flag) and
-parses Indian amounts ("1,20,000.00") and day-first dates. It is tested on made-up statements in
-the layouts of HDFC, ICICI, SBI, Axis and Kotak, never on real ones. PDF is not supported:
-download the Excel or CSV version.
-
-1. **Check the file locally first.** Nothing leaves your machine:
-   `python -m ingest path/to/statement.xls` prints the columns it found and the first rows.
-2. **Set `OWN_NAMES`** in `.env` to your name as the bank prints it (comma-separated variants).
-   Transfers between your own accounts then become *Self Transfer* instead of P2P.
-3. **Choose what may leave your machine.**
-   - `AGENT_ENABLED=false`: everything stays local (rules, SBERT, Postgres). Uncertain rows
-     go to the review queue. This is the safe choice on a free LLM tier, whose prompts the
-     provider may use to improve its products.
-   - Agent on: `PRIVACY_MODE=redact` (the default) masks people's names, your own name, phone,
-     card, account and reference numbers before a row reaches the LLM. Merchant names and amounts
-     are sent; they are what the model categorises from. Every agent decision stores
-     `llm_input`, exactly what the model saw. Masking is best effort: a person's name the
-     extractor does not recognise as a name stays visible.
-4. **Run it**: drop the file into `data/inbox/` (n8n uploads it to the API), or
-   `curl -F file=@statement.xls http://localhost:8000/triage/file`, then review at `/review`.
-
-Real data never belongs in git: everything in `data/inbox/` and `private/` is ignored.
-
-**How accurate is it on your data?** Unmeasured until you label some. Run
-`python -m ingest statement.xls --label-sheet`, fill in the `label` column of
-`private/<name>_labels.csv`, then `python -m eval.predict_agent --version A --gold
-private/<name>_labels.csv`. Results for a gold file under `private/` stay in `private/`.
-
 ## How it works
 
 **Baseline** ([categorizer/](categorizer/)). Only the narration is used.
@@ -217,11 +178,7 @@ private/<name>_labels.csv`. Results for a gold file under `private/` stay in `pr
    detects person-to-person payments from the VPA shape. For a person, the note decides:
    a rent/maintenance note means Rent (0.90), a social note ("dinner", "trip share", "gift")
    means P2P Transfer (0.90), a refund gets 0.70, no note 0.80, and a note the rules cannot
-   read ("school fees jan") 0.75: below the gate, so the agent or a human reads it. Formats
-   beyond the synthetic three (SBI's "TO TRANSFER-" prefix, Axis P2M/P2A, card POS, ACH/NACH
-   mandates, bill pay, MMT/IMPS/NEFT variants) go through a tolerant token parser that drops
-   rail codes, references, IFSCs and bank names. A "self" note, or a payee matching
-   `OWN_NAMES`, makes a Self Transfer (0.95).
+   read ("school fees jan") 0.75: below the gate, so the agent or a human reads it.
 3. *SBERT*: MiniLM similarity between the payee text and hand-written category examples.
    Confidence blends similarity with the margin over the runner-up category. The examples
    deliberately do not come from `merchants.csv`, which is the RAG directory: using it here
@@ -246,8 +203,6 @@ The loop:
 - caps tool calls per row (4), nudges once if the model answers in text, and routes to
   review on refusal, API error, guardrail violation or agent confidence below 0.7;
 - never trusts the model to copy ids (`txn_id` is overwritten in `flag_for_review`);
-- masks personal details before a row reaches the LLM (`PRIVACY_MODE=redact`, the default;
-  [agent/redact.py](agent/redact.py)) and stores the masked text as `llm_input`;
 - treats the narration as untrusted data (the prompt says so; it is never an instruction);
 - logs every tool call with args, result summary and latency, plus tokens and cost;
 - on Claude, uses server-side refusal fallback (`fallbacks: "default"`) so a declined
@@ -307,9 +262,8 @@ the rules don't cover", not only small local shops.
 | `categorizer/` | Baseline: rules, extraction, SBERT |
 | `rag/` | Build and query the merchant embedding index |
 | `mcp_server/server.py` | MCP tools (stdio) |
-| `agent/` | Agent loop, Gemini adapter, versioned prompt, guardrails, privacy redaction |
-| `ingest/` | Reads netbanking exports (CSV / XLS / XLSX) into pipeline rows; `python -m ingest` previews a file |
-| `api/main.py` | `/triage`, `/triage/file` (statement upload), `/health`, review API |
+| `agent/` | Agent loop, Gemini adapter, versioned prompt, guardrails |
+| `api/main.py` | `/triage`, `/health`, review API |
 | `review_ui/index.html` | Review queue UI (served at `/review`) |
 | `n8n/triage_workflow.json` | Importable n8n workflow |
 | `db/` | Postgres schema (`init.sql`) and helpers |

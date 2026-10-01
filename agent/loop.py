@@ -32,7 +32,6 @@ from dotenv import load_dotenv
 
 from agent import guardrails
 from agent.prompts import PROMPT_VERSION, system_prompt
-from agent.redact import redact
 
 load_dotenv()
 ROOT = Path(__file__).resolve().parent.parent
@@ -58,7 +57,6 @@ EFFORT = os.getenv("LLM_EFFORT", "low")            # per-row classification: low
 CONCURRENCY = int(os.getenv("AGENT_CONCURRENCY", "6"))
 AGENT_MIN_CONFIDENCE = float(os.getenv("AGENT_MIN_CONFIDENCE", "0.7"))
 TOOLS_TRANSPORT = os.getenv("TOOLS_TRANSPORT", "stdio")
-PRIVACY_MODE = os.getenv("PRIVACY_MODE", "redact").lower()  # redact | off  (see agent/redact.py)
 
 # USD per 1M tokens: input, output, cache read, cache write (5-minute TTL)
 PRICES = {
@@ -141,8 +139,7 @@ class Toolbox:
             target = StdioServerParameters(
                 command=sys.executable, args=["-m", "mcp_server.server"], cwd=str(ROOT),
                 env={"REVIEW_SINK": "none", "PYTHONPATH": str(ROOT), "TOKENIZERS_PARALLELISM": "false",
-                     "HF_HUB_VERBOSITY": "error", "TRANSFORMERS_VERBOSITY": "error",
-                     "OWN_NAMES": os.getenv("OWN_NAMES", "")},  # self-transfer detection in the categorizer
+                     "HF_HUB_VERBOSITY": "error", "TRANSFORMERS_VERBOSITY": "error"},
             )
         self._client = Client(target)
         await self._client.__aenter__()
@@ -179,15 +176,11 @@ def _baseline_decision(row: dict, base: dict, routed: bool, latency: float) -> d
 
 
 def _render_row(row: dict, base: dict) -> str:
-    """The only text about a transaction that reaches the LLM; personal details masked unless PRIVACY_MODE=off."""
     amount, side = (row.get("debit"), "debit") if row.get("debit") else (row.get("credit"), "credit")
-    narration, reason = row["narration"], base["reason"]
-    if PRIVACY_MODE != "off":
-        narration, reason = redact(narration, reason)
     return (f"txn_id: {row['txn_id']}\n"
-            f"narration: {narration}\n"
+            f"narration: {row['narration']}\n"
             f"amount: {amount or 'unknown'} ({side})\n"
-            f"baseline guess: {base['category']} (confidence {base['confidence']:.2f}) - {reason}")
+            f"baseline guess: {base['category']} (confidence {base['confidence']:.2f}) - {base['reason']}")
 
 
 def _summarize(payload, limit: int = 300) -> str:
@@ -199,8 +192,7 @@ async def _agent_row(llm, tb: Toolbox, tools: list[dict], system: str, row: dict
                      sem: asyncio.Semaphore, base_latency: float) -> dict:
     async with sem:
         t0 = time.perf_counter()
-        llm_input = _render_row(row, base)
-        messages = [{"role": "user", "content": llm_input}]
+        messages = [{"role": "user", "content": _render_row(row, base)}]
         calls, violations, tool_errors = [], [], 0
         usage = {"input": 0, "output": 0, "cache_read": 0, "cache_write": 0}
         final, served_by, nudged = None, MODEL, False
@@ -275,8 +267,7 @@ async def _agent_row(llm, tb: Toolbox, tools: list[dict], system: str, row: dict
 
         decision = {
             "txn_id": row["txn_id"], "decided_by": "agent", "stage": "agent", "tool_calls": calls,
-            "prompt_version": PROMPT_VERSION, "privacy": PRIVACY_MODE, "llm_input": llm_input,
-            "cost_usd": round(cost_usd(served_by, usage), 6),
+            "prompt_version": PROMPT_VERSION, "cost_usd": round(cost_usd(served_by, usage), 6),
             "latency_s": round(base_latency + time.perf_counter() - t0, 3), "tokens": usage, "model": served_by,
         }
         if final is None:

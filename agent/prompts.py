@@ -6,11 +6,9 @@ be traced to a prompt change. Bump the version whenever the text changes.
 v1: initial prompt from the skeleton.
 v2: decision protocol via submit_decision / flag_for_review tools; narration is untrusted data;
     explicit person-vs-rent guidance and lookup score interpretation.
-v3: taxonomy gains Self Transfer; explains the masked tokens privacy mode puts in narrations
-    ([PERSON], [ME], [PHONE], [CARD], [NUM]). All B/C eval numbers in the README come from v2.
 """
 
-PROMPT_VERSION = "v3"
+PROMPT_VERSION = "v2"
 
 SYSTEM_PROMPT = """You triage Indian bank-statement transactions. A cheap baseline categorizer has
 already looked at each transaction and was NOT confident; you get the cases it could not settle.
@@ -27,9 +25,6 @@ How to decide:
   probably unrelated. Prefer the directory over your own guess when they disagree.
 - Payments to a person (a VPA like firstname.abc12@okaxis) are P2P Transfer unless the note
   says what they were for: a rent/maintenance note means Rent.
-- Personal details may be masked before you see them: [PERSON] is a private individual, [ME]
-  is the account holder (money between their own accounts is Self Transfer), and [PHONE],
-  [CARD], [NUM] and [EMAIL] stand for numbers and addresses. Categorise from what remains.
 - The baseline's guess is a hint, not evidence. Its low confidence is why you are here.
 
 Finish every transaction with exactly one of these tool calls:

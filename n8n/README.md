@@ -1,14 +1,12 @@
 # n8n workflow
 
-[triage_workflow.json](triage_workflow.json): a bank statement (CSV, XLS or XLSX, as
-downloaded from netbanking, or the pipeline's own CSV) lands in `data/inbox/` → n8n uploads
-the file as-is to `POST /triage/file` → if `to_review > 0`, build an alert ("N of M
-transactions need review" + review UI link) → Slack. The API does all the parsing
-([ingest/](../ingest/)), so the workflow has no format logic of its own.
+[triage_workflow.json](triage_workflow.json): a statement CSV lands in `data/inbox/` →
+n8n reads and parses it → `POST /triage` → if `to_review > 0`, build an alert
+("N of M transactions need review" + review UI link) → Slack.
 
 ```
-Local File Trigger → Read statement file → POST /triage/file (multipart upload)
-   → IF to_review > 0 → Build review alert (Code) → Send Slack alert (disabled)
+Local File Trigger → Read CSV file → Parse rows → Build triage payload (Code)
+   → POST /triage → IF to_review > 0 → Build review alert (Code) → Send Slack alert (disabled)
 ```
 
 ## Run it
@@ -26,9 +24,8 @@ Local File Trigger → Read statement file → POST /triage/file (multipart uplo
    ```
    In Git Bash on Windows, prefix with `MSYS_NO_PATHCONV=1` so `/workflows` is not rewritten.
    Or open http://localhost:5678 and use *Import from file*.
-3. Trigger it: `python data/drop_statement.py S003`, or copy a statement export into
-   `data/inbox/`. Results appear in Postgres and at http://localhost:8000/review. A file the
-   API cannot read (a PDF, say) fails the HTTP node with the reason in the execution log.
+3. Trigger it: `python data/drop_statement.py S003`. Results appear in Postgres and at
+   http://localhost:8000/review.
 4. Alerts: enable the *Send Slack alert* node and paste your incoming-webhook URL, or swap
    it for an Email / Telegram node.
 
@@ -40,8 +37,5 @@ Local File Trigger → Read statement file → POST /triage/file (multipart uplo
 - The trigger polls, because file events from a Windows/macOS bind mount do not reach the
   container. `drop_statement.py` writes to a temp file and renames it into the inbox, so the
   watcher never reads a half-written file.
-- Verified end to end: a made-up statement in HDFC's Excel layout (title rows, summary
-  block) dropped into the inbox was uploaded, parsed into its 7 transactions and written to
-  Postgres; earlier, a 60-row CSV statement ran every node to `n8n.workflow.success`.
-- Everything in `data/inbox/` is gitignored, whatever the extension: a real statement must
-  never end up in the repo.
+- Verified end to end: dropping statement S002 ran every node, wrote 60 rows to `results`
+  and 16 to `review_queue`, and the workflow finished with `n8n.workflow.success`.

@@ -9,10 +9,7 @@ eval/predictions_*.csv
 rag/index/
 .DS_Store
 .pytest_cache/
-# anything dropped in the inbox may be a real statement: never track it
-data/inbox/*
-!data/inbox/.gitkeep
+data/inbox/*.csv
 data/.*.tmp
 data/review_queue.jsonl
 eval/results/decisions_*_limit*.jsonl
-private/

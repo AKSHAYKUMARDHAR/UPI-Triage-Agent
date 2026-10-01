@@ -15,13 +15,11 @@ import os
 from datetime import datetime, timezone
 from pathlib import Path
 
-from dotenv import load_dotenv
 from mcp.server.mcpserver import MCPServer
 from mcp.server.mcpserver.exceptions import ToolError
 
 ROOT = Path(__file__).resolve().parent.parent
-load_dotenv(ROOT / ".env")  # OWN_NAMES etc. when Claude Code launches the server directly
-TAXONOMY =json.loads((ROOT / "data" / "taxonomy.json").read_text())["categories"]
+TAXONOMY = json.loads((ROOT / "data" / "taxonomy.json").read_text())["categories"]
 REVIEW_LOG = ROOT / "data" / "review_queue.jsonl"
 
 mcp = MCPServer(
